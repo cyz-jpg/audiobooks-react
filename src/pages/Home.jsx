@@ -33,36 +33,47 @@ export default function Home() {
   }
 
   if (!data) {
-    return <div>Loading...</div>
+    return (
+      <div className="loading-container">
+        <div className="spinner"></div>
+      </div>
+    )
   }
 
   return (
     <div>
       <h1>Beschikbare collecties</h1>
       <div className="home-links">
-        <Link to="/users" state={{ apiUrl: data.users }} className="home-box">
+        <Link
+          to={`/users?src=${encodeURIComponent(data.users)}`}
+          className="home-box"
+        >
           users
         </Link>
 
-        <Link to="/genres" state={{ apiUrl: data.genres }} className="home-box">
+        <Link
+          to={`/genres?src=${encodeURIComponent(data.genres)}`}
+          className="home-box"
+        >
           genres
         </Link>
 
         <Link
-          to="/audiobooks"
-          state={{ apiUrl: data.audiobooks }}
+          to={`/audiobooks?src=${encodeURIComponent(data.audiobooks)}`}
           className="home-box"
         >
           audiobooks
         </Link>
 
-        <Link to="/reviews" state={{ apiUrl: data.reviews }} className="home-box">
+        <Link
+          to={`/reviews?src=${encodeURIComponent(data.reviews)}`}
+          className="home-box"
+        >
           reviews
         </Link>
 
         <Link
-          to="/positions"
-          state={{ apiUrl: data.positions }}
+          to={`/positions?src=${encodeURIComponent(data.positions)}`}
           className="home-box"
         >
           positions
