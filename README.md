@@ -6,7 +6,7 @@ In deze applicatie bevat `pages/model` de modelpagina's. Dit zijn pagina's voor 
 
 De applicatie gebruikt `HashRouter`, zodat routes ook blijven werken bij refresh zonder extra serverconfiguratie.
 
-De links van de homepagina naar de modelpagina's geven de API-bron door via een query parameter `src`, bijvoorbeeld `#/users?src=...`. De modelpagina leest die parameter uit om de juiste collectie-URL te kennen.
+De homepagina geeft de collectie-URL door via `Link state`. Als die state ontbreekt, sturen de modelpagina's terug naar home.
 
 Op de modelpagina's staat de `add`-functionaliteit.
 

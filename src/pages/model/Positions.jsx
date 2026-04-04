@@ -1,10 +1,17 @@
-import { useSearchParams } from 'react-router-dom'
+import { useEffect } from 'react'
+import { Navigate, useLocation } from 'react-router-dom'
 
 export default function Positions() {
-  const [searchParams] = useSearchParams()
-  const apiUrl = searchParams.get('src')
+  const location = useLocation()
+  const stateApiUrl = location.state?.apiUrl
 
-  console.log(apiUrl)
+  if (!stateApiUrl) {
+    return <Navigate to="/" replace />
+  }
+
+  useEffect(() => {
+    console.log(stateApiUrl)
+  }, [stateApiUrl])
 
   return <h1>Positions</h1>
 }
