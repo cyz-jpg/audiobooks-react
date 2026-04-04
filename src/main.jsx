@@ -6,13 +6,13 @@ import Home from './pages/Home'
 import NotFound from './pages/NotFound'
 import Audiobooks from './pages/model/Audiobooks'
 import Genres from './pages/model/Genres'
-import Playbackpositions from './pages/model/Playbackpositions'
-import Ratings from './pages/model/Ratings'
+import Positions from './pages/model/Positions'
+import Reviews from './pages/model/Reviews'
 import Users from './pages/model/Users'
 import Audiobook from './pages/object/Audiobook'
 import Genre from './pages/object/Genre'
-import Playbackposition from './pages/object/Playbackposition'
-import Rating from './pages/object/Rating'
+import Position from './pages/object/Position'
+import Review from './pages/object/Review'
 import User from './pages/object/User'
 
 createRoot(document.getElementById('root')).render(
@@ -23,13 +23,13 @@ createRoot(document.getElementById('root')).render(
         <Route path="/users" element={<Users />} />
         <Route path="/audiobooks" element={<Audiobooks />} />
         <Route path="/genres" element={<Genres />} />
-        <Route path="/playbackpositions" element={<Playbackpositions />} />
-        <Route path="/ratings" element={<Ratings />} />
+        <Route path="/positions" element={<Positions />} />
+        <Route path="/reviews" element={<Reviews />} />
         <Route path="/users/:encodedUrl" element={<User />} />
         <Route path="/audiobooks/:encodedUrl" element={<Audiobook />} />
         <Route path="/genres/:encodedUrl" element={<Genre />} />
-        <Route path="/playbackpositions/:encodedUrl" element={<Playbackposition />} />
-        <Route path="/ratings/:encodedUrl" element={<Rating />} />
+        <Route path="/positions/:encodedUrl" element={<Position />} />
+        <Route path="/reviews/:encodedUrl" element={<Review />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
     </BrowserRouter>
