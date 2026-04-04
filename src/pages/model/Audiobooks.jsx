@@ -1,8 +1,8 @@
-import { useLocation } from 'react-router-dom'
+import { useSearchParams } from 'react-router-dom'
 
 export default function Audiobooks() {
-  const location = useLocation()
-  const apiUrl = location.state?.apiUrl
+  const [searchParams] = useSearchParams()
+  const apiUrl = searchParams.get('src')
 
   console.log(apiUrl)
 
