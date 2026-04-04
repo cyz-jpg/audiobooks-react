@@ -1,7 +1,7 @@
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import { BrowserRouter, Link, Route, Routes } from 'react-router-dom'
-import './index.css'
+import './css/index.css'
 import Home from './pages/Home'
 import NotFound from './pages/NotFound'
 import Audiobooks from './pages/model/Audiobooks'
@@ -18,10 +18,6 @@ import User from './pages/object/User'
 createRoot(document.getElementById('root')).render(
   <StrictMode>
     <BrowserRouter>
-      <nav>
-        <Link to="/">Home</Link>
-      </nav>
-
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/users" element={<Users />} />
