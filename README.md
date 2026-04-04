@@ -1,16 +1,9 @@
-# React + Vite
+# README
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+In deze applicatie bevat `pages/model` de modelpagina's. Dit zijn pagina's voor collecties of overzichten, zoals `users` en `audiobooks`.
 
-Currently, two official plugins are available:
+`pages/object` bevat de objectpagina's. Dit zijn detailpagina's voor een specifiek object, zoals `users/:encodedUrl` en `audiobooks/:encodedUrl`, zodat de routes correct kunnen werken.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+Op de modelpagina's staat de `add`-functionaliteit.
 
-## React Compiler
-
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
-
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+Op de objectpagina's staan de `update`- en `delete`-functionaliteiten.
