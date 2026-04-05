@@ -1,10 +1,10 @@
 
 import { useState } from 'react'
-import '../css/NewUser.css'
+import '../css/ModelForm.css'
 
 const token = import.meta.env.VITE_API_TOKEN
 
-export default function NewUser({
+export default function ModelForm({
   requiredFields = [],
   optionalFields = [],
   submitUrl,
@@ -62,16 +62,16 @@ export default function NewUser({
   }
 
   return (
-    <form className="new-user-form" onSubmit={handleSubmit}>
+    <form className="model-form" onSubmit={handleSubmit}>
       {requiredFields.map((field) => renderField(field, true))}
       {optionalFields.map((field) => renderField(field, false))}
       {errorMessage && (
-        <p className="new-user-error">{errorMessage}</p>
+        <p className="model-form-error">{errorMessage}</p>
       )}
       {isSubmitted && (
-        <p className="new-user-success">{successMessage}</p>
+        <p className="model-form-success">{successMessage}</p>
       )}
-      <button type="submit" className="new-user-submit">
+      <button type="submit" className="model-form-submit">
         Submit
       </button>
     </form>
