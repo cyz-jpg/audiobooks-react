@@ -269,3 +269,31 @@ nav a:focus-visible {
     min-height: 150px;
   }
 }
+
+@media (max-width: 420px) {
+  nav {
+    padding: 0.85rem 0.75rem 0;
+  }
+
+  nav a {
+    min-width: 84px;
+    padding: 0.56rem 0.9rem;
+    font-size: 0.78rem;
+  }
+
+  .model-page {
+    width: min(100% - 0.75rem, 1100px);
+  }
+
+  .model-view-switch {
+    width: 100%;
+    padding: 0.25rem;
+    gap: 0.25rem;
+    border-radius: 20px;
+  }
+
+  .model-view-switch-button {
+    padding: 0.58rem 0.65rem;
+    font-size: 0.8rem;
+  }
+}
