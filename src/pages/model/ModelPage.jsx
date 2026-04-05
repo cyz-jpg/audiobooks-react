@@ -23,8 +23,10 @@ export default function ModelPage({
   const [mediaType, setMediaType] = useState('application/json')
   const [activeView, setActiveView] = useState('new-item')
 
-  useEffect(() => {
-    fetch(apiUrl)
+  const loadModel = async () => {
+    setErrorCode(null)
+
+    return fetch(apiUrl)
       .then((response) => {
         if (!response.ok) {
           setErrorCode(response.status)
@@ -50,6 +52,10 @@ export default function ModelPage({
       .catch(() => {
         setErrorCode('fetch failed')
       })
+  }
+
+  useEffect(() => {
+    loadModel()
   }, [apiUrl])
 
   if (errorCode) {
@@ -93,6 +99,9 @@ export default function ModelPage({
           mediaType={mediaType}
           successMessage={successMessage}
           errorEntityLabel={errorEntityLabel}
+          onSuccess={async () => {
+            await loadModel()
+          }}
         />
       ) : (
         <ModelList
