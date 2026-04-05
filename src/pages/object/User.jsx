@@ -22,6 +22,7 @@ export default function User() {
   const { encodedUrl } = useParams()
   const [data, setData] = useState(null)
   const [error, setError] = useState(null)
+  const [message, setMessage] = useState('')
   const [tab, setTab] = useState('reviews')
 
   let apiUrl = null
@@ -41,7 +42,7 @@ export default function User() {
       const response = await fetch(url)
 
       if (!response.ok) {
-        return 'Error loading review'
+        return (await response.text()) || 'Error loading review'
       }
 
       const review = await response.json()
@@ -61,7 +62,7 @@ export default function User() {
       const response = await fetch(url)
 
       if (!response.ok) {
-        return 'Error loading position'
+        return (await response.text()) || 'Error loading position'
       }
 
       const position = await response.json()
@@ -81,7 +82,10 @@ export default function User() {
       .then((response) => {
         if (!response.ok) {
           setError(response.status)
-          return null
+          return response.text().then((text) => {
+            setMessage(text)
+            return null
+          })
         }
 
         return response.json()
@@ -93,11 +97,12 @@ export default function User() {
       })
       .catch(() => {
         setError('fetch failed')
+        setMessage('fetch failed')
       })
   }, [apiUrl])
 
   if (error) {
-    return <Error errorCode={error} />
+    return <Error errorCode={error} message={message} />
   }
 
   if (!data) {
@@ -121,6 +126,12 @@ export default function User() {
         <p className="eyebrow">User Detail</p>
         <h1>{data.name}</h1>
         <p className="object-subtitle">{data.email}</p>
+        <button>
+          Update user
+        </button>
+        <button>
+          Delete user
+        </button>
       </section>
 
       <div className="model-view-switch" aria-label="User sections">
