@@ -11,6 +11,7 @@ export default function ModelForm({
   mediaType = 'application/json',
   successMessage = 'Successfully added item.',
   errorEntityLabel = 'item',
+  onSuccess,
 }) {
   const [errorMessage, setErrorMessage] = useState('')
   const [isSubmitted, setIsSubmitted] = useState(false)
@@ -39,6 +40,7 @@ export default function ModelForm({
     const formData = new FormData(form)
     const body = Object.fromEntries(formData.entries())
 
+    try {
       const response = await fetch(submitUrl, {
         method: 'POST',
         headers: {
@@ -59,6 +61,10 @@ export default function ModelForm({
 
       form.reset()
       setIsSubmitted(true)
+      await onSuccess?.()
+    } catch {
+      setErrorMessage(`Error adding ${errorEntityLabel}, please retry.`)
+    }
   }
 
   return (
