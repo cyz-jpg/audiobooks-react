@@ -1,19 +1,13 @@
-import { Link, Navigate, useLocation } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import { useEffect, useState } from 'react'
 import Error from '../Error'
 
-export default function Users() {
-  const location = useLocation()
-  const stateApiUrl = location.state?.apiUrl
+export default function Users({ apiUrl }) {
   const [data, setData] = useState(null)
   const [errorCode, setErrorCode] = useState(null)
 
-  if (!stateApiUrl) {
-    return <Navigate to="/" replace />
-  }
-
   useEffect(() => {
-    fetch(stateApiUrl)
+    fetch(apiUrl)
       .then((response) => {
         if (!response.ok) {
           setErrorCode(response.status)
@@ -29,7 +23,7 @@ export default function Users() {
       .catch(() => {
         setErrorCode('fetch failed')
       })
-  }, [stateApiUrl])
+  }, [apiUrl])
 
   if (errorCode) {
     return <Error errorCode={errorCode} />
