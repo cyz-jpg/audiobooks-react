@@ -7,6 +7,7 @@ const token = import.meta.env.VITE_API_TOKEN
 export default function ModelForm({
   required = [],
   optional = [],
+  arrayFields = [],
   submitUrl,
   mediaType = 'application/json',
   successText = 'Successfully added item.',
@@ -22,7 +23,13 @@ export default function ModelForm({
         {field}
         {!isRequired && <span className="field-optional">optional</span>}
       </label>
-      <input id={field} name={field} type="text" required={isRequired} />
+      <input
+        id={field}
+        name={field}
+        type="text"
+        required={isRequired}
+        placeholder={arrayFields.includes(field) ? 'comma-separated values' : ''}
+      />
     </div>
   )
 
@@ -39,6 +46,15 @@ export default function ModelForm({
 
     const formData = new FormData(form)
     const body = Object.fromEntries(formData.entries())
+
+    arrayFields.forEach((field) => {
+      if (body[field]) {
+        body[field] = body[field]
+          .split(',')
+          .map((value) => value.trim())
+          .filter(Boolean)
+      }
+    })
 
     try {
       const response = await fetch(submitUrl, {

@@ -30,9 +30,11 @@ root.render(
 const response = await fetch(apiUrl)
 
 if (!response.ok) {
+  const message = await response.text()
+
   root.render(
     <StrictMode>
-      <Error errorCode={response.status} />
+      <Error errorCode={response.status} message={message} />
     </StrictMode>,
   )
 } else {

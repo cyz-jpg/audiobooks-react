@@ -17,20 +17,26 @@ export default function ModelPage({
   fallbackText = 'Unnamed item',
   itemsKey = 'items',
   resolveListText,
+  arrayFields = [],
 }) {
   const [data, setData] = useState(null)
   const [error, setError] = useState(null)
+  const [message, setMessage] = useState('')
   const [mediaType, setMediaType] = useState('application/json')
   const [tab, setTab] = useState('new-item')
 
   const load = async () => {
     setError(null)
+    setMessage('')
 
     return fetch(apiUrl)
       .then((response) => {
         if (!response.ok) {
           setError(response.status)
-          return null
+          return response.text().then((text) => {
+            setMessage(text)
+            return null
+          })
         }
 
         const nextMediaType = response.headers
@@ -51,6 +57,7 @@ export default function ModelPage({
       })
       .catch(() => {
         setError('fetch failed')
+        setMessage('fetch failed')
       })
   }
 
@@ -59,7 +66,7 @@ export default function ModelPage({
   }, [apiUrl])
 
   if (error) {
-    return <Error errorCode={error} />
+    return <Error errorCode={error} message={message} />
   }
 
   if (!data) {
@@ -95,6 +102,7 @@ export default function ModelPage({
         <ModelForm
           required={data.requiredFields}
           optional={data.optionalFields}
+          arrayFields={arrayFields}
           submitUrl={apiUrl}
           mediaType={mediaType}
           successText={successText}

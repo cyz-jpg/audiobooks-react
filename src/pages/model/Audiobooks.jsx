@@ -14,6 +14,7 @@ export default function Audiobooks({ apiUrl }) {
       errorText="Error loading audiobook"
       fallbackText="Untitled audiobook"
       itemsKey="audiobooks"
+      arrayFields={['authors', 'genres']}
     />
   )
 }
