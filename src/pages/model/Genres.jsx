@@ -1,17 +1,19 @@
-import { useEffect } from 'react'
-import { Link } from 'react-router-dom'
+import ModelPage from './ModelPage.jsx'
 
 export default function Genres({ apiUrl }) {
-  useEffect(() => {
-    console.log(apiUrl)
-  }, [apiUrl])
-
   return (
-    <div>
-      <nav>
-        <Link to="/">Home</Link>
-      </nav>
-      <h1>Genres</h1>
-    </div>
+    <ModelPage
+      apiUrl={apiUrl}
+      createButtonLabel="New Genre"
+      listButtonLabel="Genre List"
+      listField="name"
+      successMessage="Successfully added genre."
+      errorEntityLabel="genre"
+      emptyLabel="No genres found."
+      loadingLabel="Loading genre..."
+      errorLabel="Error loading genre"
+      fallbackLabel="Unnamed genre"
+      itemsKey="genres"
+    />
   )
 }

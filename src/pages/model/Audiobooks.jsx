@@ -1,17 +1,19 @@
-import { useEffect } from 'react'
-import { Link } from 'react-router-dom'
+import ModelPage from './ModelPage.jsx'
 
 export default function Audiobooks({ apiUrl }) {
-  useEffect(() => {
-    console.log(apiUrl)
-  }, [apiUrl])
-
   return (
-    <div>
-      <nav>
-        <Link to="/">Home</Link>
-      </nav>
-      <h1>Audiobooks</h1>
-    </div>
+    <ModelPage
+      apiUrl={apiUrl}
+      createButtonLabel="New Audiobook"
+      listButtonLabel="Audiobook List"
+      listField="name"
+      successMessage="Successfully added audiobook."
+      errorEntityLabel="audiobook"
+      emptyLabel="No audiobooks found."
+      loadingLabel="Loading audiobook..."
+      errorLabel="Error loading audiobook"
+      fallbackLabel="Untitled audiobook"
+      itemsKey="audiobooks"
+    />
   )
 }
