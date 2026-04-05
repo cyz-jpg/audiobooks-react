@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react'
-import '../css/UserList.css'
+import '../css/ModelList.css'
 
 const PAGE_SIZE = 10
 
@@ -18,7 +18,7 @@ async function defaultResolveItem(userUrl, displayField, fallbackLabel, errorLab
   }
 }
 
-export default function UserList({
+export default function ModelList({
   users = [],
   displayField = 'name',
   loadingLabel = 'Loading item...',
@@ -90,16 +90,16 @@ export default function UserList({
   }
 
   if (users.length === 0) {
-    return <p className="user-list-empty">{emptyLabel}</p>
+    return <p className="model-list-empty">{emptyLabel}</p>
   }
 
   return (
-    <section className="user-list">
-      <ul className="user-list-items">
+    <section className="model-list">
+      <ul className="model-list-items">
         {visibleUsers.map((userUrl) => (
           <li
             key={userUrl}
-            className={`user-list-item ${
+            className={`model-list-item ${
               loadedUsers[userUrl] === 'loading' ? 'is-loading' : ''
             }`}
           >
@@ -110,21 +110,21 @@ export default function UserList({
         ))}
       </ul>
 
-      <div className="user-list-pagination">
+      <div className="model-list-pagination">
         <button
           type="button"
-          className="user-list-button"
+          className="model-list-button"
           onClick={goToPreviousPage}
           disabled={page === 1}
         >
           Previous
         </button>
-        <span className="user-list-page-indicator">
+        <span className="model-list-page-indicator">
           Page {page} of {totalPages}
         </span>
         <button
           type="button"
-          className="user-list-button"
+          className="model-list-button"
           onClick={goToNextPage}
           disabled={page === totalPages}
         >

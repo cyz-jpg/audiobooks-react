@@ -1,4 +1,4 @@
-.new-user-form {
+.model-form {
   width: clamp(260px, 42vw, 420px);
   max-width: calc(100vw - 2rem);
   margin: clamp(1rem, 4vw, 2rem) auto 0;
@@ -49,7 +49,7 @@
   border-color: #8a5a2b;
 }
 
-.new-user-submit {
+.model-form-submit {
   min-height: clamp(2.5rem, 5.4vw, 3rem);
   margin-top: 0.5rem;
   padding: 0.7rem 1rem;
@@ -68,25 +68,25 @@
     filter 180ms ease;
 }
 
-.new-user-submit:hover {
+.model-form-submit:hover {
   transform: translateY(-2px);
   box-shadow: 0 14px 28px rgba(138, 90, 43, 0.28);
   filter: brightness(1.04);
 }
 
-.new-user-submit:focus-visible {
+.model-form-submit:focus-visible {
   outline: 2px solid rgba(138, 90, 43, 0.28);
   outline-offset: 3px;
 }
 
-.new-user-error {
+.model-form-error {
   margin: 0.25rem 0 0;
   color: #9f2d2d;
   font-size: clamp(0.84rem, 1.6vw, 0.95rem);
   font-weight: 600;
 }
 
-.new-user-success {
+.model-form-success {
   margin: 0.25rem 0 0;
   color: #2d6a3f;
   font-size: clamp(0.84rem, 1.6vw, 0.95rem);
@@ -94,7 +94,7 @@
 }
 
 @media (max-width: 900px) {
-  .new-user-form {
+  .model-form {
     width: clamp(250px, 56vw, 360px);
     max-width: calc(100vw - 1.75rem);
   }
@@ -110,7 +110,7 @@
 }
 
 @media (max-width: 600px) {
-  .new-user-form {
+  .model-form {
     width: min(84vw, 300px);
     max-width: calc(100vw - 2.25rem);
   }
@@ -126,7 +126,7 @@
 }
 
 @media (max-width: 420px) {
-  .new-user-form {
+  .model-form {
     width: min(82vw, 280px);
     max-width: calc(100vw - 2.5rem);
   }

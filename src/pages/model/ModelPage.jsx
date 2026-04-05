@@ -1,8 +1,8 @@
 import { Link } from 'react-router-dom'
 import { useEffect, useState } from 'react'
 import Error from '../Error'
-import NewUser from '../../components/NewUser.jsx'
-import UserList from '../../components/UserList.jsx'
+import ModelForm from '../../components/ModelForm.jsx'
+import ModelList from '../../components/ModelList.jsx'
 
 export default function ModelPage({
   apiUrl,
@@ -65,28 +65,28 @@ export default function ModelPage({
   }
 
   return (
-    <div className="users-page">
+    <div className="model-page">
       <nav>
         <Link to="/">Home</Link>
       </nav>
-      <div className="view-switch" aria-label="Model page sections">
+      <div className="model-view-switch" aria-label="Model page sections">
         <button
           type="button"
-          className={activeView === 'new-item' ? 'view-switch-button is-active' : 'view-switch-button'}
+          className={activeView === 'new-item' ? 'model-view-switch-button is-active' : 'model-view-switch-button'}
           onClick={() => setActiveView('new-item')}
         >
           {createButtonLabel}
         </button>
         <button
           type="button"
-          className={activeView === 'item-list' ? 'view-switch-button is-active' : 'view-switch-button'}
+          className={activeView === 'item-list' ? 'model-view-switch-button is-active' : 'model-view-switch-button'}
           onClick={() => setActiveView('item-list')}
         >
           {listButtonLabel}
         </button>
       </div>
       {activeView === 'new-item' ? (
-        <NewUser
+        <ModelForm
           requiredFields={data.requiredFields}
           optionalFields={data.optionalFields}
           submitUrl={apiUrl}
@@ -95,7 +95,7 @@ export default function ModelPage({
           errorEntityLabel={errorEntityLabel}
         />
       ) : (
-        <UserList
+        <ModelList
           users={data[itemsKey] ?? []}
           displayField={listField}
           emptyLabel={emptyLabel}

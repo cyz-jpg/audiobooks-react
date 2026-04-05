@@ -160,13 +160,13 @@ nav a:focus-visible {
   min-height: 40vh;
 }
 
-.users-page {
+.model-page {
   width: min(100%, 1100px);
   margin: 0 auto;
   padding-bottom: 2rem;
 }
 
-.view-switch {
+.model-view-switch {
   display: flex;
   gap: 0.4rem;
   width: fit-content;
@@ -179,7 +179,7 @@ nav a:focus-visible {
   backdrop-filter: blur(10px);
 }
 
-.view-switch-button {
+.model-view-switch-button {
   min-width: 118px;
   padding: 0.7rem 1rem;
   border: 0;
@@ -197,18 +197,18 @@ nav a:focus-visible {
     box-shadow 180ms ease;
 }
 
-.view-switch-button:hover {
+.model-view-switch-button:hover {
   transform: translateY(-1px);
   color: #1f1a17;
 }
 
-.view-switch-button.is-active {
+.model-view-switch-button.is-active {
   background: linear-gradient(135deg, #8a5a2b, #b37a43);
   color: #fffaf4;
   box-shadow: 0 10px 24px rgba(138, 90, 43, 0.25);
 }
 
-.view-switch-button:focus-visible {
+.model-view-switch-button:focus-visible {
   outline: 2px solid rgba(138, 90, 43, 0.3);
   outline-offset: 2px;
 }
@@ -249,16 +249,16 @@ nav a:focus-visible {
     padding-top: 1rem;
   }
 
-  .users-page {
+  .model-page {
     width: min(100% - 1rem, 1100px);
   }
 
-  .view-switch {
+  .model-view-switch {
     width: min(100%, 320px);
     margin-top: 1.25rem;
   }
 
-  .view-switch-button {
+  .model-view-switch-button {
     min-width: 0;
     flex: 1;
     padding: 0.62rem 0.8rem;
