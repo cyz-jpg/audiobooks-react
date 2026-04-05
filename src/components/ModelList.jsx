@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from 'react'
+import { Link } from 'react-router-dom'
 import '../css/ModelList.css'
 
 const PAGE_SIZE = 10
@@ -20,6 +21,7 @@ async function defaultResolveItem(userUrl, displayField, fallbackLabel, errorLab
 
 export default function ModelList({
   users = [],
+  routeSegment = 'items',
   displayField = 'name',
   loadingLabel = 'Loading item...',
   errorLabel = 'Error loading item',
@@ -103,9 +105,14 @@ export default function ModelList({
               loadedUsers[userUrl] === 'loading' ? 'is-loading' : ''
             }`}
           >
-            {loadedUsers[userUrl] === 'loading'
-              ? loadingLabel
-              : (loadedUsers[userUrl] ?? loadingLabel)}
+            <Link
+              className="model-list-link"
+              to={`/${routeSegment}/${encodeURIComponent(userUrl)}`}
+            >
+              {loadedUsers[userUrl] === 'loading'
+                ? loadingLabel
+                : (loadedUsers[userUrl] ?? loadingLabel)}
+            </Link>
           </li>
         ))}
       </ul>

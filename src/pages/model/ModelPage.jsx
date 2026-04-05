@@ -97,6 +97,7 @@ export default function ModelPage({
       ) : (
         <ModelList
           users={data[itemsKey] ?? []}
+          routeSegment={itemsKey}
           displayField={listField}
           emptyLabel={emptyLabel}
           loadingLabel={loadingLabel}
