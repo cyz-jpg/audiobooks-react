@@ -50,7 +50,7 @@ export default function User() {
         fetchField(review.audiobook, 'name', 'Unknown audiobook'),
       ])
 
-      return `${name} - ${audiobook} - score ${review.score}`
+      return `${name} - book: ${audiobook} - score ${review.score}`
     } catch {
       return 'Error loading review'
     }
@@ -70,7 +70,7 @@ export default function User() {
         fetchField(position.audiobook, 'name', 'Unknown audiobook'),
       ])
 
-      return `${name} - ${audiobook} - ${position.position}`
+      return `${name} - book: ${audiobook} - position: ${position.position}`
     } catch {
       return 'Error loading position'
     }
