@@ -1,17 +1,17 @@
 import { useEffect } from 'react'
-import { Navigate, useLocation } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 
-export default function Audiobooks() {
-  const location = useLocation()
-  const stateApiUrl = location.state?.apiUrl
-
-  if (!stateApiUrl) {
-    return <Navigate to="/" replace />
-  }
-
+export default function Audiobooks({ apiUrl }) {
   useEffect(() => {
-    console.log(stateApiUrl)
-  }, [stateApiUrl])
+    console.log(apiUrl)
+  }, [apiUrl])
 
-  return <h1>Audiobooks</h1>
+  return (
+    <div>
+      <nav>
+        <Link to="/">Home</Link>
+      </nav>
+      <h1>Audiobooks</h1>
+    </div>
+  )
 }

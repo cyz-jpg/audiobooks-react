@@ -1,17 +1,17 @@
 import { useEffect } from 'react'
-import { Navigate, useLocation } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 
-export default function Positions() {
-  const location = useLocation()
-  const stateApiUrl = location.state?.apiUrl
-
-  if (!stateApiUrl) {
-    return <Navigate to="/" replace />
-  }
-
+export default function Positions({ apiUrl }) {
   useEffect(() => {
-    console.log(stateApiUrl)
-  }, [stateApiUrl])
+    console.log(apiUrl)
+  }, [apiUrl])
 
-  return <h1>Positions</h1>
+  return (
+    <div>
+      <nav>
+        <Link to="/">Home</Link>
+      </nav>
+      <h1>Positions</h1>
+    </div>
+  )
 }

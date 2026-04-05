@@ -1,17 +1,17 @@
 import { useEffect } from 'react'
-import { Navigate, useLocation } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 
-export default function Genres() {
-  const location = useLocation()
-  const stateApiUrl = location.state?.apiUrl
-
-  if (!stateApiUrl) {
-    return <Navigate to="/" replace />
-  }
-
+export default function Genres({ apiUrl }) {
   useEffect(() => {
-    console.log(stateApiUrl)
-  }, [stateApiUrl])
+    console.log(apiUrl)
+  }, [apiUrl])
 
-  return <h1>Genres</h1>
+  return (
+    <div>
+      <nav>
+        <Link to="/">Home</Link>
+      </nav>
+      <h1>Genres</h1>
+    </div>
+  )
 }
