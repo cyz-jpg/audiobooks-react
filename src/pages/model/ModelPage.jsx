@@ -6,30 +6,30 @@ import ModelList from '../../components/ModelList.jsx'
 
 export default function ModelPage({
   apiUrl,
-  createButtonLabel = 'New Item',
-  listButtonLabel = 'Item List',
+  createLabel = 'New Item',
+  listLabel = 'Item List',
   listField = 'name',
-  successMessage = 'Successfully added item.',
-  errorEntityLabel = 'item',
-  emptyLabel = 'No items found.',
-  loadingLabel = 'Loading item...',
-  errorLabel = 'Error loading item',
-  fallbackLabel = 'Unnamed item',
+  successText = 'Successfully added item.',
+  itemName = 'item',
+  emptyText = 'No items found.',
+  loadingText = 'Loading item...',
+  errorText = 'Error loading item',
+  fallbackText = 'Unnamed item',
   itemsKey = 'items',
-  resolveListItem,
+  resolveListText,
 }) {
   const [data, setData] = useState(null)
-  const [errorCode, setErrorCode] = useState(null)
+  const [error, setError] = useState(null)
   const [mediaType, setMediaType] = useState('application/json')
-  const [activeView, setActiveView] = useState('new-item')
+  const [tab, setTab] = useState('new-item')
 
-  const loadModel = async () => {
-    setErrorCode(null)
+  const load = async () => {
+    setError(null)
 
     return fetch(apiUrl)
       .then((response) => {
         if (!response.ok) {
-          setErrorCode(response.status)
+          setError(response.status)
           return null
         }
 
@@ -44,22 +44,22 @@ export default function ModelPage({
 
         return response.json()
       })
-      .then((json) => {
-        if (json) {
-          setData(json)
+      .then((result) => {
+        if (result) {
+          setData(result)
         }
       })
       .catch(() => {
-        setErrorCode('fetch failed')
+        setError('fetch failed')
       })
   }
 
   useEffect(() => {
-    loadModel()
+    load()
   }, [apiUrl])
 
-  if (errorCode) {
-    return <Error errorCode={errorCode} />
+  if (error) {
+    return <Error errorCode={error} />
   }
 
   if (!data) {
@@ -78,41 +78,41 @@ export default function ModelPage({
       <div className="model-view-switch" aria-label="Model page sections">
         <button
           type="button"
-          className={activeView === 'new-item' ? 'model-view-switch-button is-active' : 'model-view-switch-button'}
-          onClick={() => setActiveView('new-item')}
+          className={tab === 'new-item' ? 'model-view-switch-button is-active' : 'model-view-switch-button'}
+          onClick={() => setTab('new-item')}
         >
-          {createButtonLabel}
+          {createLabel}
         </button>
         <button
           type="button"
-          className={activeView === 'item-list' ? 'model-view-switch-button is-active' : 'model-view-switch-button'}
-          onClick={() => setActiveView('item-list')}
+          className={tab === 'item-list' ? 'model-view-switch-button is-active' : 'model-view-switch-button'}
+          onClick={() => setTab('item-list')}
         >
-          {listButtonLabel}
+          {listLabel}
         </button>
       </div>
-      {activeView === 'new-item' ? (
+      {tab === 'new-item' ? (
         <ModelForm
-          requiredFields={data.requiredFields}
-          optionalFields={data.optionalFields}
+          required={data.requiredFields}
+          optional={data.optionalFields}
           submitUrl={apiUrl}
           mediaType={mediaType}
-          successMessage={successMessage}
-          errorEntityLabel={errorEntityLabel}
+          successText={successText}
+          itemName={itemName}
           onSuccess={async () => {
-            await loadModel()
+            await load()
           }}
         />
       ) : (
         <ModelList
-          users={data[itemsKey] ?? []}
-          routeSegment={itemsKey}
-          displayField={listField}
-          emptyLabel={emptyLabel}
-          loadingLabel={loadingLabel}
-          errorLabel={errorLabel}
-          fallbackLabel={fallbackLabel}
-          resolveItem={resolveListItem}
+          items={data[itemsKey]}
+          routePart={itemsKey}
+          field={listField}
+          emptyText={emptyText}
+          loadingText={loadingText}
+          errorText={errorText}
+          fallbackText={fallbackText}
+          resolveText={resolveListText}
         />
       )}
     </div>

@@ -1,37 +1,37 @@
 import { useCallback } from 'react'
 import ModelPage from './ModelPage.jsx'
 
-async function fetchLinkedLabel(url, field, fallbackLabel) {
+async function fetchField(url, field, fallback) {
   try {
     const response = await fetch(url)
 
     if (!response.ok) {
-      return fallbackLabel
+      return fallback
     }
 
-    const json = await response.json()
-    return json[field] ?? fallbackLabel
+    const data = await response.json()
+    return data[field] || fallback
   } catch {
-    return fallbackLabel
+    return fallback
   }
 }
 
 export default function Positions({ apiUrl }) {
-  const resolvePositionItem = useCallback(async (positionUrl) => {
+  const positionText = useCallback(async (url) => {
     try {
-      const response = await fetch(positionUrl)
+      const response = await fetch(url)
 
       if (!response.ok) {
         return 'Error loading position'
       }
 
-      const position = await response.json()
-      const [userName, audiobookTitle] = await Promise.all([
-        fetchLinkedLabel(position.user, 'name', 'Unknown user'),
-        fetchLinkedLabel(position.audiobook, 'title', 'Unknown audiobook'),
+      const data = await response.json()
+      const [name, audiobook] = await Promise.all([
+        fetchField(data.user, 'name', 'Unknown user'),
+        fetchField(data.audiobook, 'name', 'Unknown audiobook'),
       ])
 
-      return `${userName} · ${audiobookTitle} · ${position.position}`
+      return `${name} - ${audiobook} - ${data.position}`
     } catch {
       return 'Error loading position'
     }
@@ -40,16 +40,16 @@ export default function Positions({ apiUrl }) {
   return (
     <ModelPage
       apiUrl={apiUrl}
-      createButtonLabel="New Position"
-      listButtonLabel="Position List"
-      successMessage="Successfully added position."
-      errorEntityLabel="position"
-      emptyLabel="No positions found."
-      loadingLabel="Loading position..."
-      errorLabel="Error loading position"
-      fallbackLabel="Unnamed position"
+      createLabel="New Position"
+      listLabel="Position List"
+      successText="Successfully added position."
+      itemName="position"
+      emptyText="No positions found."
+      loadingText="Loading position..."
+      errorText="Error loading position"
+      fallbackText="Unnamed position"
       itemsKey="positions"
-      resolveListItem={resolvePositionItem}
+      resolveListText={positionText}
     />
   )
 }

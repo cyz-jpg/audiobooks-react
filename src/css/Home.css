@@ -1,5 +1,7 @@
 h1 {
   text-align: center;
+  padding: 0 0.75rem;
+  font-size: clamp(2rem, 6vw, 3rem);
 }
 
 .home-links {
@@ -14,23 +16,23 @@ h1 {
   align-items: center;
   justify-content: center;
   aspect-ratio: 1 / 1;
-  border: 1px solid #d6dbe3;
-  border-radius: 12px;
-  background: #ffffff;
+  border: 1px solid rgba(20, 33, 61, 0.08);
+  border-radius: 18px;
+  background: linear-gradient(160deg, rgba(255, 255, 255, 0.96), rgba(239, 246, 255, 0.88));
   padding: 12px;
   text-decoration: none;
-  color: #1f2937;
+  color: #14213d;
   font-size: 0.95rem;
   font-weight: 600;
   text-align: center;
-  box-shadow: 0 10px 24px rgba(15, 23, 42, 0.08);
+  box-shadow: 0 18px 36px rgba(37, 99, 235, 0.08);
   transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
 }
 
 .home-box:hover {
   transform: translateY(-3px);
-  border-color: #93c5fd;
-  box-shadow: 0 16px 30px rgba(15, 23, 42, 0.14);
+  border-color: rgba(37, 99, 235, 0.2);
+  box-shadow: 0 22px 42px rgba(37, 99, 235, 0.14);
 }
 
 @media (max-width: 900px) {
@@ -53,5 +55,22 @@ h1 {
     padding: 10px;
     font-size: 0.85rem;
     border-radius: 12px;
+  }
+}
+
+@media (max-width: 420px) {
+  h1 {
+    font-size: clamp(1.6rem, 8vw, 2.1rem);
+  }
+
+  .home-links {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+  }
+
+  .home-box {
+    aspect-ratio: 1 / 0.9;
+    padding: 8px;
+    font-size: 0.8rem;
   }
 }

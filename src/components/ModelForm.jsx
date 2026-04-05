@@ -5,35 +5,35 @@ import '../css/ModelForm.css'
 const token = import.meta.env.VITE_API_TOKEN
 
 export default function ModelForm({
-  requiredFields = [],
-  optionalFields = [],
+  required = [],
+  optional = [],
   submitUrl,
   mediaType = 'application/json',
-  successMessage = 'Successfully added item.',
-  errorEntityLabel = 'item',
+  successText = 'Successfully added item.',
+  itemName = 'item',
   onSuccess,
 }) {
-  const [errorMessage, setErrorMessage] = useState('')
-  const [isSubmitted, setIsSubmitted] = useState(false)
+  const [error, setError] = useState('')
+  const [saved, setSaved] = useState(false)
 
-  const renderField = (field, required = false) => (
+  const renderField = (field, isRequired = false) => (
     <div key={field} className="field">
       <label htmlFor={field}>
         {field}
-        {!required && <span className="field-optional">optional</span>}
+        {!isRequired && <span className="field-optional">optional</span>}
       </label>
-      <input id={field} name={field} type="text" required={required} />
+      <input id={field} name={field} type="text" required={isRequired} />
     </div>
   )
 
   const handleSubmit = async (event) => {
     event.preventDefault()
     const form = event.currentTarget
-    setErrorMessage('')
-    setIsSubmitted(false)
+    setError('')
+    setSaved(false)
 
     if (!token) {
-      setErrorMessage('Missing API token.')
+      setError('Missing API token.')
       return
     }
 
@@ -51,31 +51,30 @@ export default function ModelForm({
       })
 
       if (!response.ok) {
-        const responseText = await response.text()
-        setErrorMessage(
-          responseText ||
-            `Error adding ${errorEntityLabel} (${response.status}), please retry.`,
+        const text = await response.text()
+        setError(
+          text || `Error adding ${itemName} (${response.status}), please retry.`,
         )
         return
       }
 
       form.reset()
-      setIsSubmitted(true)
+      setSaved(true)
       await onSuccess?.()
     } catch {
-      setErrorMessage(`Error adding ${errorEntityLabel}, please retry.`)
+      setError(`Error adding ${itemName}, please retry.`)
     }
   }
 
   return (
     <form className="model-form" onSubmit={handleSubmit}>
-      {requiredFields.map((field) => renderField(field, true))}
-      {optionalFields.map((field) => renderField(field, false))}
-      {errorMessage && (
-        <p className="model-form-error">{errorMessage}</p>
+      {required.map((field) => renderField(field, true))}
+      {optional.map((field) => renderField(field, false))}
+      {error && (
+        <p className="model-form-error">{error}</p>
       )}
-      {isSubmitted && (
-        <p className="model-form-success">{successMessage}</p>
+      {saved && (
+        <p className="model-form-success">{successText}</p>
       )}
       <button type="submit" className="model-form-submit">
         Submit

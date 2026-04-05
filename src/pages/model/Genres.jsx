@@ -4,15 +4,15 @@ export default function Genres({ apiUrl }) {
   return (
     <ModelPage
       apiUrl={apiUrl}
-      createButtonLabel="New Genre"
-      listButtonLabel="Genre List"
+      createLabel="New Genre"
+      listLabel="Genre List"
       listField="name"
-      successMessage="Successfully added genre."
-      errorEntityLabel="genre"
-      emptyLabel="No genres found."
-      loadingLabel="Loading genre..."
-      errorLabel="Error loading genre"
-      fallbackLabel="Unnamed genre"
+      successText="Successfully added genre."
+      itemName="genre"
+      emptyText="No genres found."
+      loadingText="Loading genre..."
+      errorText="Error loading genre"
+      fallbackText="Unnamed genre"
       itemsKey="genres"
     />
   )
