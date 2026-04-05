@@ -17,14 +17,14 @@
   font-size: clamp(0.82rem, 1.6vw, 0.95rem);
   font-weight: 600;
   text-transform: capitalize;
-  color: #4f3422;
+  color: #1d4ed8;
 }
 
 .field-optional {
   padding: 0.14rem 0.45rem;
   border-radius: 999px;
-  background: rgba(138, 90, 43, 0.12);
-  color: #8a5a2b;
+  background: rgba(20, 184, 166, 0.14);
+  color: #0f766e;
   font-size: 0.72em;
   font-weight: 700;
   text-transform: uppercase;
@@ -35,28 +35,29 @@
   width: 100%;
   min-height: clamp(2.35rem, 5vw, 2.9rem);
   padding: clamp(0.5rem, 1.6vw, 0.75rem) clamp(0.65rem, 2vw, 0.9rem);
-  border: 1px solid rgba(79, 52, 34, 0.2);
+  border: 1px solid rgba(37, 99, 235, 0.14);
   border-radius: clamp(9px, 1.5vw, 12px);
-  background: rgba(255, 250, 244, 0.92);
-  color: #1f1a17;
+  background: rgba(255, 255, 255, 0.96);
+  color: #14213d;
   font: inherit;
   font-size: clamp(0.9rem, 1.8vw, 1rem);
+  box-shadow: inset 0 1px 2px rgba(20, 33, 61, 0.03);
 }
 
 .field input:focus {
-  outline: 2px solid rgba(138, 90, 43, 0.25);
+  outline: 2px solid rgba(37, 99, 235, 0.18);
   outline-offset: 2px;
-  border-color: #8a5a2b;
+  border-color: #2563eb;
 }
 
 .model-form-submit {
   min-height: clamp(2.5rem, 5.4vw, 3rem);
   margin-top: 0.5rem;
   padding: 0.7rem 1rem;
-  border: 1px solid rgba(79, 52, 34, 0.18);
+  border: 1px solid rgba(37, 99, 235, 0.12);
   border-radius: 999px;
-  background: linear-gradient(135deg, #8a5a2b, #b37a43);
-  color: #fffaf4;
+  background: linear-gradient(135deg, #2563eb, #14b8a6);
+  color: #f8fbff;
   font: inherit;
   font-size: clamp(0.92rem, 1.8vw, 1rem);
   font-weight: 600;
@@ -70,25 +71,25 @@
 
 .model-form-submit:hover {
   transform: translateY(-2px);
-  box-shadow: 0 14px 28px rgba(138, 90, 43, 0.28);
+  box-shadow: 0 16px 30px rgba(37, 99, 235, 0.22);
   filter: brightness(1.04);
 }
 
 .model-form-submit:focus-visible {
-  outline: 2px solid rgba(138, 90, 43, 0.28);
+  outline: 2px solid rgba(37, 99, 235, 0.24);
   outline-offset: 3px;
 }
 
 .model-form-error {
   margin: 0.25rem 0 0;
-  color: #9f2d2d;
+  color: #dc2626;
   font-size: clamp(0.84rem, 1.6vw, 0.95rem);
   font-weight: 600;
 }
 
 .model-form-success {
   margin: 0.25rem 0 0;
-  color: #2d6a3f;
+  color: #0f766e;
   font-size: clamp(0.84rem, 1.6vw, 0.95rem);
   font-weight: 600;
 }

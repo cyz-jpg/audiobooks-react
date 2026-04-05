@@ -4,15 +4,15 @@ export default function Audiobooks({ apiUrl }) {
   return (
     <ModelPage
       apiUrl={apiUrl}
-      createButtonLabel="New Audiobook"
-      listButtonLabel="Audiobook List"
+      createLabel="New Audiobook"
+      listLabel="Audiobook List"
       listField="name"
-      successMessage="Successfully added audiobook."
-      errorEntityLabel="audiobook"
-      emptyLabel="No audiobooks found."
-      loadingLabel="Loading audiobook..."
-      errorLabel="Error loading audiobook"
-      fallbackLabel="Untitled audiobook"
+      successText="Successfully added audiobook."
+      itemName="audiobook"
+      emptyText="No audiobooks found."
+      loadingText="Loading audiobook..."
+      errorText="Error loading audiobook"
+      fallbackText="Untitled audiobook"
       itemsKey="audiobooks"
     />
   )

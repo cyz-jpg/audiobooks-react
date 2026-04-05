@@ -4,15 +4,15 @@ export default function Users({ apiUrl }) {
   return (
     <ModelPage
       apiUrl={apiUrl}
-      createButtonLabel="New User"
-      listButtonLabel="User List"
+      createLabel="New User"
+      listLabel="User List"
       listField="name"
-      successMessage="Successfully added user."
-      errorEntityLabel="user"
-      emptyLabel="No users found."
-      loadingLabel="Loading user..."
-      errorLabel="Error loading user"
-      fallbackLabel="Unnamed user"
+      successText="Successfully added user."
+      itemName="user"
+      emptyText="No users found."
+      loadingText="Loading user..."
+      errorText="Error loading user"
+      fallbackText="Unnamed user"
       itemsKey="users"
     />
   )

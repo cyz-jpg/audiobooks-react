@@ -4,40 +4,40 @@ import '../css/ModelList.css'
 
 const PAGE_SIZE = 10
 
-async function defaultResolveItem(userUrl, displayField, fallbackLabel, errorLabel) {
+async function resolveDefault(url, field, fallback, errorText) {
   try {
-    const response = await fetch(userUrl)
+    const response = await fetch(url)
 
     if (!response.ok) {
-      return errorLabel
+      return errorText
     }
 
-    const json = await response.json()
-    return json[displayField] ?? fallbackLabel
+    const data = await response.json()
+    return data[field] || fallback
   } catch {
-    return errorLabel
+    return errorText
   }
 }
 
 export default function ModelList({
-  users = [],
-  routeSegment = 'items',
-  displayField = 'name',
-  loadingLabel = 'Loading item...',
-  errorLabel = 'Error loading item',
-  fallbackLabel = 'Unnamed item',
-  emptyLabel = 'No items found.',
-  resolveItem,
+  items = [],
+  routePart = 'items',
+  field = 'name',
+  loadingText = 'Loading item...',
+  errorText = 'Error loading item',
+  fallbackText = 'Unnamed item',
+  emptyText = 'No items found.',
+  resolveText,
 }) {
   const [page, setPage] = useState(1)
-  const [loadedUsers, setLoadedUsers] = useState({})
+  const [loaded, setLoaded] = useState({})
 
-  const totalPages = Math.max(1, Math.ceil(users.length / PAGE_SIZE))
+  const totalPages = Math.max(1, Math.ceil(items.length / PAGE_SIZE))
 
-  const visibleUsers = useMemo(() => {
+  const visible = useMemo(() => {
     const startIndex = (page - 1) * PAGE_SIZE
-    return users.slice(startIndex, startIndex + PAGE_SIZE)
-  }, [page, users])
+    return items.slice(startIndex, startIndex + PAGE_SIZE)
+  }, [items, page])
 
   useEffect(() => {
     setPage((currentPage) => Math.min(currentPage, totalPages))
@@ -46,34 +46,34 @@ export default function ModelList({
   useEffect(() => {
     let isCancelled = false
 
-    const missingUsers = visibleUsers.filter((userUrl) => !loadedUsers[userUrl])
+    const missing = visible.filter((url) => !loaded[url])
 
-    if (missingUsers.length === 0) {
+    if (missing.length === 0) {
       return undefined
     }
 
-    setLoadedUsers((currentUsers) => ({
-      ...currentUsers,
+    setLoaded((current) => ({
+      ...current,
       ...Object.fromEntries(
-        missingUsers.map((userUrl) => [userUrl, 'loading']),
+        missing.map((url) => [url, 'loading']),
       ),
     }))
 
     Promise.all(
-      missingUsers.map(async (userUrl) => {
-        const resolvedLabel = resolveItem
-          ? await resolveItem(userUrl)
-          : await defaultResolveItem(userUrl, displayField, fallbackLabel, errorLabel)
+      missing.map(async (url) => {
+        const text = resolveText
+          ? await resolveText(url)
+          : await resolveDefault(url, field, fallbackText, errorText)
 
-        return [userUrl, resolvedLabel]
+        return [url, text]
       }),
     ).then((results) => {
       if (isCancelled) {
         return
       }
 
-      setLoadedUsers((currentUsers) => ({
-        ...currentUsers,
+      setLoaded((current) => ({
+        ...current,
         ...Object.fromEntries(results),
       }))
     })
@@ -81,7 +81,7 @@ export default function ModelList({
     return () => {
       isCancelled = true
     }
-  }, [displayField, errorLabel, fallbackLabel, resolveItem, visibleUsers])
+  }, [errorText, fallbackText, field, resolveText, visible])
 
   const goToPreviousPage = () => {
     setPage((currentPage) => Math.max(1, currentPage - 1))
@@ -91,27 +91,25 @@ export default function ModelList({
     setPage((currentPage) => Math.min(totalPages, currentPage + 1))
   }
 
-  if (users.length === 0) {
-    return <p className="model-list-empty">{emptyLabel}</p>
+  if (items.length === 0) {
+    return <p className="model-list-empty">{emptyText}</p>
   }
 
   return (
     <section className="model-list">
       <ul className="model-list-items">
-        {visibleUsers.map((userUrl) => (
+        {visible.map((url) => (
           <li
-            key={userUrl}
+            key={url}
             className={`model-list-item ${
-              loadedUsers[userUrl] === 'loading' ? 'is-loading' : ''
+              loaded[url] === 'loading' ? 'is-loading' : ''
             }`}
           >
             <Link
               className="model-list-link"
-              to={`/${routeSegment}/${encodeURIComponent(userUrl)}`}
+              to={`/${routePart}/${encodeURIComponent(url)}`}
             >
-              {loadedUsers[userUrl] === 'loading'
-                ? loadingLabel
-                : (loadedUsers[userUrl] ?? loadingLabel)}
+              {loaded[url] === 'loading' ? loadingText : loaded[url] || loadingText}
             </Link>
           </li>
         ))}
