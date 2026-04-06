@@ -224,3 +224,45 @@
     min-width: 0;
   }
 }
+
+@media (max-width: 360px) {
+  .model-list {
+    width: min(100% - 0.65rem, 100%);
+    padding: 0.7rem;
+  }
+
+  .model-list-items {
+    gap: 0.55rem;
+  }
+
+  .model-list-item {
+    border-radius: 12px;
+  }
+
+  .model-list-link {
+    padding: 0.68rem 0.7rem;
+    font-size: 0.9rem;
+  }
+
+  .model-list-link::after {
+    position: static;
+    display: inline-flex;
+    margin-top: 0.45rem;
+    transform: none;
+  }
+
+  .model-list-pagination {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.5rem;
+  }
+
+  .model-list-button {
+    width: 100%;
+  }
+
+  .model-list-page-indicator {
+    width: 100%;
+    text-align: center;
+  }
+}

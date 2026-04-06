@@ -15,6 +15,7 @@ import Genre from './pages/object/Genre'
 import Position from './pages/object/Position'
 import Review from './pages/object/Review'
 import User from './pages/object/User'
+import { getServerError } from './utils/utils.jsx'
 
 const apiUrl = import.meta.env.VITE_API_URL
 const root = createRoot(document.getElementById('root'))
@@ -27,38 +28,44 @@ root.render(
   </StrictMode>,
 )
 
-const response = await fetch(apiUrl)
+try {
+  const response = await fetch(apiUrl)
+  if (!response.ok) {
+    const message = await getServerError(response, 'Error loading API root')
 
-if (!response.ok) {
-  const message = await response.text()
+    root.render(
+      <StrictMode>
+        <Error errorCode={response.status} message={message} />
+      </StrictMode>,
+    )
+  } else {
+    const data = await response.json()
 
+    root.render(
+      <StrictMode>
+        <HashRouter>
+          <Routes>
+            <Route path="/" element={<Home apiRes={data} />} />
+            <Route path="/users" element={<Users apiUrl={data.users} />} />
+            <Route path="/audiobooks" element={<Audiobooks apiUrl={data.audiobooks} />} />
+            <Route path="/genres" element={<Genres apiUrl={data.genres} />} />
+            <Route path="/positions" element={<Positions apiUrl={data.positions} />} />
+            <Route path="/reviews" element={<Reviews apiUrl={data.reviews} />} />
+            <Route path="/users/:encodedUrl" element={<User modelApiUrl={data.users} />} />
+            <Route path="/audiobooks/:encodedUrl" element={<Audiobook modelApiUrl={data.audiobooks} />} />
+            <Route path="/genres/:encodedUrl" element={<Genre modelApiUrl={data.genres} />} />
+            <Route path="/positions/:encodedUrl" element={<Position modelApiUrl={data.positions} />} />
+            <Route path="/reviews/:encodedUrl" element={<Review modelApiUrl={data.reviews} />} />
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </HashRouter>
+      </StrictMode>,
+    )
+  }
+} catch {
   root.render(
     <StrictMode>
-      <Error errorCode={response.status} message={message} />
-    </StrictMode>,
-  )
-} else {
-
-  const data = await response.json()
-
-  root.render(
-    <StrictMode>
-      <HashRouter>
-        <Routes>
-          <Route path="/" element={<Home apiRes={data} />} />
-          <Route path="/users" element={<Users apiUrl={data.users} />} />
-          <Route path="/audiobooks" element={<Audiobooks apiUrl={data.audiobooks} />} />
-          <Route path="/genres" element={<Genres apiUrl={data.genres} />} />
-          <Route path="/positions" element={<Positions apiUrl={data.positions} />} />
-          <Route path="/reviews" element={<Reviews apiUrl={data.reviews} />} />
-          <Route path="/users/:encodedUrl" element={<User />} />
-          <Route path="/audiobooks/:encodedUrl" element={<Audiobook />} />
-          <Route path="/genres/:encodedUrl" element={<Genre />} />
-          <Route path="/positions/:encodedUrl" element={<Position />} />
-          <Route path="/reviews/:encodedUrl" element={<Review />} />
-          <Route path="*" element={<NotFound />} />
-        </Routes>
-      </HashRouter>
+      <Error errorCode="fetch failed" message="Error loading API root, please retry." />
     </StrictMode>,
   )
 }

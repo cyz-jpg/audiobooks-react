@@ -4,19 +4,13 @@ import '../css/ModelList.css'
 
 const PAGE_SIZE = 10
 
-async function resolveDefault(url, field, fallback, errorText) {
-  try {
-    const response = await fetch(url)
-
-    if (!response.ok) {
-      return errorText
-    }
-
-    const data = await response.json()
-    return data[field] || fallback
-  } catch {
-    return errorText
+async function resolveDefault(url, field, fallback) {
+  const response = await fetch(url)
+  if (!response.ok) {
+    return fallback
   }
+  const data = await response.json()
+  return data[field] || fallback
 }
 
 export default function ModelList({
@@ -61,11 +55,16 @@ export default function ModelList({
 
     Promise.all(
       missing.map(async (url) => {
-        const text = resolveText
-          ? await resolveText(url)
-          : await resolveDefault(url, field, fallbackText, errorText)
+        try {
+          const text = resolveText
+            ? await resolveText(url)
+            : await resolveDefault(url, field, fallbackText)
 
-        return [url, text]
+          return [url, text]
+        } catch {
+          return [url, errorText]
+        }
+
       }),
     ).then((results) => {
       if (isCancelled) {

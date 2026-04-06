@@ -108,7 +108,8 @@ nav a:focus-visible {
   color: rgba(20, 33, 61, 0.76);
 }
 
-.object-header {
+.object-header,
+.item-head {
   width: min(100% - 2rem, 820px);
   margin: 1.75rem auto 0;
   padding: 1.4rem 1.5rem;
@@ -118,13 +119,148 @@ nav a:focus-visible {
   box-shadow: 0 24px 52px rgba(37, 99, 235, 0.1);
 }
 
-.object-header h1 {
+.object-header h1,
+.item-head h1 {
   margin: 0;
   font-size: clamp(2rem, 5vw, 3.5rem);
   line-height: 0.95;
 }
 
-.object-subtitle {
+.object-actions,
+.actions {
+  display: flex;
+  justify-content: center;
+  gap: 0.75rem;
+  margin-top: 1.25rem;
+  flex-wrap: wrap;
+}
+
+.object-action-button,
+.action-btn {
+  min-width: 140px;
+  padding: 0.85rem 1.2rem;
+  border: 0;
+  border-radius: 999px;
+  background: rgba(37, 99, 235, 0.1);
+  color: #14213d;
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 180ms ease, transform 180ms ease, box-shadow 180ms ease;
+}
+
+.object-action-button:hover,
+.action-btn:hover {
+  transform: translateY(-1px);
+  background: rgba(37, 99, 235, 0.16);
+}
+
+.object-action-button.is-active,
+.action-btn.is-active {
+  background: linear-gradient(135deg, #2563eb, #14b8a6);
+  color: #f8fbff;
+  box-shadow: 0 12px 28px rgba(37, 99, 235, 0.24);
+}
+
+.object-action-button.delete-button,
+.action-btn.danger {
+  background: rgba(239, 68, 68, 0.12);
+  color: #8b1d1d;
+}
+
+.object-action-button.delete-button:hover,
+.action-btn.danger:hover {
+  background: rgba(239, 68, 68, 0.18);
+}
+
+.object-action-button.delete-button.is-active,
+.action-btn.danger.is-active {
+  background: linear-gradient(135deg, #dc2626, #f97316);
+  color: #f8fbff;
+  box-shadow: 0 12px 28px rgba(220, 38, 38, 0.24);
+}
+
+.tab-placeholder {
+  margin: 2rem auto;
+  padding: 1.5rem;
+  max-width: 820px;
+  border: 1px solid rgba(20, 33, 61, 0.08);
+  border-radius: 24px;
+  background: linear-gradient(160deg, rgba(255, 255, 255, 0.94), rgba(250, 240, 240, 0.9));
+}
+
+.tab-placeholder h2 {
+  margin: 0 0 0.75rem;
+  font-size: 1.5rem;
+}
+
+.tab-placeholder p {
+  margin: 0;
+  color: rgba(20, 33, 61, 0.72);
+}
+
+.popUp-backdrop,
+.popup-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(20, 33, 61, 0.48);
+  display: grid;
+  place-items: center;
+  padding: 1.5rem;
+  z-index: 50;
+}
+
+.popUp-card,
+.popup-card {
+  width: min(100%, 520px);
+  max-height: 90vh;
+  padding: 1.5rem;
+  border-radius: 28px;
+  background: linear-gradient(160deg, rgba(255, 255, 255, 0.98), rgba(245, 246, 250, 0.96));
+  box-shadow: 0 32px 80px rgba(20, 33, 61, 0.18);
+  position: relative;
+  overflow-y: auto;
+}
+
+.popUp-close-button,
+.popup-close {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  border: 0;
+  background: transparent;
+  color: rgba(20, 33, 61, 0.72);
+  font-size: 1.5rem;
+  line-height: 1;
+  cursor: pointer;
+  z-index: 10;
+}
+
+.popUp-panel,
+.popup-panel {
+  display: grid;
+  gap: 1rem;
+}
+
+.delete-panel h2,
+.danger-panel h2 {
+  color: #b91c1c;
+}
+
+.popUp-panel h2,
+.popup-panel h2 {
+  margin: 0;
+  font-size: 1.75rem;
+}
+
+.popUp-panel p,
+.popup-panel p {
+  margin: 0;
+  color: rgba(20, 33, 61, 0.76);
+}
+
+.object-subtitle,
+.subtitle {
   margin: 0.9rem 0 0;
   font-size: 1rem;
   color: rgba(20, 33, 61, 0.68);
@@ -278,15 +414,52 @@ nav a:focus-visible {
     padding-top: 1rem;
   }
 
-  .object-header {
+  .object-header,
+  .item-head {
     width: min(100% - 1rem, 820px);
     margin-top: 1.25rem;
     padding: 1.1rem 1rem;
     border-radius: 20px;
   }
 
-  .object-subtitle {
+  .object-actions,
+  .actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .object-action-button,
+  .action-btn {
+    min-width: 0;
+    width: 100%;
+  }
+
+  .object-subtitle,
+  .subtitle {
     font-size: 0.94rem;
+  }
+
+  .tab-placeholder {
+    margin: 1.5rem auto;
+    padding: 1.25rem;
+  }
+
+  .popUp-backdrop,
+  .popup-backdrop {
+    padding: 1rem;
+  }
+
+  .popUp-card,
+  .popup-card {
+    width: min(100%, 480px);
+    padding: 1.25rem;
+    border-radius: 24px;
+    max-height: 85vh;
+  }
+
+  .popUp-panel h2,
+  .popup-panel h2 {
+    font-size: 1.6rem;
   }
 
   .model-page {
@@ -294,15 +467,15 @@ nav a:focus-visible {
   }
 
   .model-view-switch {
-    width: min(100%, 320px);
+    width: min(100%, 100%);
     margin-top: 1.25rem;
+    flex-wrap: wrap;
   }
 
   .model-view-switch-button {
     min-width: 0;
-    flex: 1;
+    flex: 1 1 48%;
     padding: 0.62rem 0.8rem;
-    font-size: 0.84rem;
   }
 
   .resource-card {
@@ -315,8 +488,36 @@ nav a:focus-visible {
     font-size: 1rem;
   }
 }
+@media (max-width: 768px) {
+  .popUp-backdrop,
+  .popup-backdrop {
+    padding: 1.25rem;
+  }
 
-@media (max-width: 420px) {
+  .popUp-card,
+  .popup-card {
+    width: min(100%, 450px);
+    padding: 1.4rem;
+    border-radius: 26px;
+    max-height: 88vh;
+  }
+
+  .popUp-close-button,
+  .popup-close {
+    top: 0.9rem;
+    right: 0.9rem;
+    font-size: 1.45rem;
+  }
+
+  .popUp-panel h2,
+  .popup-panel h2 {
+    font-size: 1.6rem;
+  }
+
+  .popUp-panel p,
+  .popup-panel p {
+    font-size: 0.95rem;
+  }
   nav {
     padding: 0.85rem 0.75rem 0;
   }
@@ -331,13 +532,15 @@ nav a:focus-visible {
     width: min(100% - 0.75rem, 1100px);
   }
 
-  .object-header {
+  .object-header,
+  .item-head {
     width: min(100% - 0.75rem, 820px);
     padding: 0.95rem 0.85rem;
     border-radius: 16px;
   }
 
-  .object-header h1 {
+  .object-header h1,
+  .item-head h1 {
     font-size: clamp(1.6rem, 8vw, 2.2rem);
   }
 
@@ -363,5 +566,85 @@ nav a:focus-visible {
     min-height: 45vh;
     padding: 1.2rem 0.85rem;
     font-size: 0.94rem;
+  }
+}
+
+@media (max-width: 360px) {
+  nav {
+    padding: 0.65rem 0.65rem 0;
+    gap: 0.5rem;
+  }
+
+  nav a {
+    min-width: 80px;
+    padding: 0.5rem 0.75rem;
+    font-size: 0.72rem;
+  }
+
+  .model-page {
+    padding: 0 0.5rem 1.5rem;
+  }
+
+  .object-header,
+  .item-head {
+    padding: 0.85rem 0.75rem;
+  }
+
+  .object-action-button,
+  .action-btn,
+  .model-view-switch-button {
+    font-size: 0.82rem;
+  }
+
+  .model-view-switch-button {
+    padding: 0.52rem 0.65rem;
+  }
+
+  .tab-placeholder {
+    padding: 1rem;
+  }
+
+  .popUp-card,
+  .popup-card {
+    width: min(100%, 100%);
+    padding: 1.2rem;
+    border-radius: 20px;
+    max-height: 80vh;
+  }
+
+  .popUp-close-button,
+  .popup-close {
+    top: 0.75rem;
+    right: 0.75rem;
+    font-size: 1.3rem;
+  }
+
+  .popUp-panel h2,
+  .popup-panel h2 {
+    font-size: 1.5rem;
+  }
+
+  .popUp-panel p,
+  .popup-panel p {
+    font-size: 0.9rem;
+  }
+}
+
+@media (min-width: 1200px) {
+  .popUp-card,
+  .popup-card {
+    width: min(100%, 600px);
+    padding: 2rem;
+    border-radius: 32px;
+  }
+
+  .popUp-panel h2,
+  .popup-panel h2 {
+    font-size: 2rem;
+  }
+
+  .popUp-panel p,
+  .popup-panel p {
+    font-size: 1.1rem;
   }
 }

@@ -74,3 +74,17 @@ h1 {
     font-size: 0.8rem;
   }
 }
+
+@media (max-width: 360px) {
+  .home-links {
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+
+  .home-box {
+    height: auto;
+    aspect-ratio: auto;
+    padding: 6px;
+    font-size: 0.78rem;
+  }
+}
