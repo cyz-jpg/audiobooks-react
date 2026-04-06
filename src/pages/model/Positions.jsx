@@ -1,34 +1,19 @@
 import { useCallback } from 'react'
 import ModelPage from './ModelPage.jsx'
-
-async function fetchField(url, field, fallback) {
-  try {
-    const response = await fetch(url)
-
-    if (!response.ok) {
-      return fallback
-    }
-
-    const data = await response.json()
-    return data[field] || fallback
-  } catch {
-    return fallback
-  }
-}
+import { fetchFieldValue, getServerError } from '../../utils/utils.jsx'
 
 export default function Positions({ apiUrl }) {
   const positionText = useCallback(async (url) => {
     try {
       const response = await fetch(url)
-
       if (!response.ok) {
-        return 'Error loading position'
+        return await getServerError(response, 'Error loading position')
       }
 
       const data = await response.json()
       const [name, audiobook] = await Promise.all([
-        fetchField(data.user, 'name', 'Unknown user'),
-        fetchField(data.audiobook, 'name', 'Unknown audiobook'),
+        fetchFieldValue(data.user, 'name', 'Unknown user'),
+        fetchFieldValue(data.audiobook, 'name', 'Unknown audiobook'),
       ])
 
       return `${name} - ${audiobook} - ${data.position}`

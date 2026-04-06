@@ -1,4 +1,5 @@
-.model-form {
+.model-form,
+.form-box {
   width: clamp(260px, 42vw, 420px);
   max-width: calc(100vw - 2rem);
   margin: clamp(1rem, 4vw, 2rem) auto 0;
@@ -20,7 +21,8 @@
   color: #1d4ed8;
 }
 
-.field-optional {
+.field-optional,
+.tag {
   padding: 0.14rem 0.45rem;
   border-radius: 999px;
   background: rgba(20, 184, 166, 0.14);
@@ -50,7 +52,8 @@
   border-color: #2563eb;
 }
 
-.model-form-submit {
+.model-form-submit,
+.form-btn {
   min-height: clamp(2.5rem, 5.4vw, 3rem);
   margin-top: 0.5rem;
   padding: 0.7rem 1rem;
@@ -69,25 +72,29 @@
     filter 180ms ease;
 }
 
-.model-form-submit:hover {
+.model-form-submit:hover,
+.form-btn:hover {
   transform: translateY(-2px);
   box-shadow: 0 16px 30px rgba(37, 99, 235, 0.22);
   filter: brightness(1.04);
 }
 
-.model-form-submit:focus-visible {
+.model-form-submit:focus-visible,
+.form-btn:focus-visible {
   outline: 2px solid rgba(37, 99, 235, 0.24);
   outline-offset: 3px;
 }
 
-.model-form-error {
+.model-form-error,
+.form-err {
   margin: 0.25rem 0 0;
   color: #dc2626;
   font-size: clamp(0.84rem, 1.6vw, 0.95rem);
   font-weight: 600;
 }
 
-.model-form-success {
+.model-form-success,
+.form-ok {
   margin: 0.25rem 0 0;
   color: #0f766e;
   font-size: clamp(0.84rem, 1.6vw, 0.95rem);
@@ -95,7 +102,8 @@
 }
 
 @media (max-width: 900px) {
-  .model-form {
+  .model-form,
+  .form-box {
     width: clamp(250px, 56vw, 360px);
     max-width: calc(100vw - 1.75rem);
   }
@@ -111,7 +119,8 @@
 }
 
 @media (max-width: 600px) {
-  .model-form {
+  .model-form,
+  .form-box {
     width: min(84vw, 300px);
     max-width: calc(100vw - 2.25rem);
   }
@@ -127,7 +136,8 @@
 }
 
 @media (max-width: 420px) {
-  .model-form {
+  .model-form,
+  .form-box {
     width: min(82vw, 280px);
     max-width: calc(100vw - 2.5rem);
   }
@@ -135,5 +145,33 @@
   .field {
     gap: 0.3rem;
     margin-bottom: 0.65rem;
+  }
+}
+
+@media (max-width: 360px) {
+  .model-form,
+  .form-box {
+    width: min(90vw, 260px);
+    max-width: calc(100vw - 1.5rem);
+  }
+
+  .field {
+    gap: 0.28rem;
+    margin-bottom: 0.6rem;
+  }
+
+  .field label {
+    font-size: 0.82rem;
+  }
+
+  .field input {
+    min-height: 2.2rem;
+    padding: 0.55rem 0.75rem;
+  }
+
+  .model-form-submit,
+  .form-btn {
+    padding: 0.65rem 0.9rem;
+    font-size: 0.88rem;
   }
 }

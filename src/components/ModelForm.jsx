@@ -1,6 +1,7 @@
 
 import { useState } from 'react'
 import '../css/ModelForm.css'
+import { formDataToBody, getServerError } from '../utils/utils.jsx'
 
 const token = import.meta.env.VITE_API_TOKEN
 
@@ -21,7 +22,7 @@ export default function ModelForm({
     <div key={field} className="field">
       <label htmlFor={field}>
         {field}
-        {!isRequired && <span className="field-optional">optional</span>}
+        {!isRequired && <span className="tag">optional</span>}
       </label>
       <input
         id={field}
@@ -39,22 +40,8 @@ export default function ModelForm({
     setError('')
     setSaved(false)
 
-    if (!token) {
-      setError('Missing API token.')
-      return
-    }
-
     const formData = new FormData(form)
-    const body = Object.fromEntries(formData.entries())
-
-    arrayFields.forEach((field) => {
-      if (body[field]) {
-        body[field] = body[field]
-          .split(',')
-          .map((value) => value.trim())
-          .filter(Boolean)
-      }
-    })
+    const body = formDataToBody(formData, arrayFields)
 
     try {
       const response = await fetch(submitUrl, {
@@ -67,10 +54,7 @@ export default function ModelForm({
       })
 
       if (!response.ok) {
-        const text = await response.text()
-        setError(
-          text || `Error adding ${itemName} (${response.status}), please retry.`,
-        )
+        setError(await getServerError(response, `Error adding ${itemName}`))
         return
       }
 
@@ -83,16 +67,16 @@ export default function ModelForm({
   }
 
   return (
-    <form className="model-form" onSubmit={handleSubmit}>
+    <form className="form-box" onSubmit={handleSubmit}>
       {required.map((field) => renderField(field, true))}
       {optional.map((field) => renderField(field, false))}
       {error && (
-        <p className="model-form-error">{error}</p>
+        <p className="form-err">{error}</p>
       )}
       {saved && (
-        <p className="model-form-success">{successText}</p>
+        <p className="form-ok">{successText}</p>
       )}
-      <button type="submit" className="model-form-submit">
+      <button type="submit" className="form-btn">
         Submit
       </button>
     </form>

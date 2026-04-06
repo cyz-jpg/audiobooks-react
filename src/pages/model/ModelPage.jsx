@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react'
 import Error from '../Error'
 import ModelForm from '../../components/ModelForm.jsx'
 import ModelList from '../../components/ModelList.jsx'
+import { getServerError } from '../../utils/utils.jsx'
 
 export default function ModelPage({
   apiUrl,
@@ -29,36 +30,29 @@ export default function ModelPage({
     setError(null)
     setMessage('')
 
-    return fetch(apiUrl)
-      .then((response) => {
-        if (!response.ok) {
-          setError(response.status)
-          return response.text().then((text) => {
-            setMessage(text)
-            return null
-          })
-        }
+    try {
+      const response = await fetch(apiUrl)
+      if (!response.ok) {
+        setError(response.status)
+        setMessage(await getServerError(response, `Error loading ${itemName}`))
+        return
+      }
 
-        const nextMediaType = response.headers
-          .get('Content-Type')
-          ?.split(';')[0]
-          ?.trim()
+      const nextMediaType = response.headers
+        .get('Content-Type')
+        ?.split(';')[0]
+        ?.trim()
 
-        if (nextMediaType) {
-          setMediaType(nextMediaType)
-        }
+      if (nextMediaType) {
+        setMediaType(nextMediaType)
+      }
 
-        return response.json()
-      })
-      .then((result) => {
-        if (result) {
-          setData(result)
-        }
-      })
-      .catch(() => {
-        setError('fetch failed')
-        setMessage('fetch failed')
-      })
+      const json = await response.json()
+      setData(json)
+    } catch {
+      setError('fetch failed')
+      setMessage(`Error loading ${itemName}, please retry.`)
+    }
   }
 
   useEffect(() => {

@@ -1,37 +1,21 @@
 import { useCallback, useEffect, useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import ModelList from '../../components/ModelList.jsx'
+import Update from '../../components/Update.jsx'
+import Delete from '../../components/Delete.jsx'
 import Error from '../Error'
+import { decodeEncodedUrl, fetchFieldValue, getServerError } from '../../utils/utils.jsx'
 
-async function fetchField(url, field, fallback) {
-  try {
-    const response = await fetch(url)
-
-    if (!response.ok) {
-      return fallback
-    }
-
-    const data = await response.json()
-    return data[field] || fallback
-  } catch {
-    return fallback
-  }
-}
-
-export default function User() {
+export default function User({ modelApiUrl }) {
   const { encodedUrl } = useParams()
-  const [data, setData] = useState(null)
-  const [error, setError] = useState(null)
-  const [message, setMessage] = useState('')
+  const [user, setUser] = useState(null)
+  const [errCode, setErrCode] = useState(null)
+  const [errMsg, setErrMsg] = useState('')
   const [tab, setTab] = useState('reviews')
+  const [popUp, setPopUp] = useState('')
+  const [etag, setEtag] = useState('')
 
-  let apiUrl = null
-
-  try {
-    apiUrl = decodeURIComponent(encodedUrl)
-  } catch {
-    apiUrl = null
-  }
+  const apiUrl = decodeEncodedUrl(encodedUrl)
 
   if (!apiUrl) {
     return <Error errorCode={400} />
@@ -40,15 +24,14 @@ export default function User() {
   const reviewLabel = useCallback(async (url) => {
     try {
       const response = await fetch(url)
-
       if (!response.ok) {
-        return (await response.text()) || 'Error loading review'
+        return await getServerError(response, 'Error loading review')
       }
 
       const review = await response.json()
       const [name, audiobook] = await Promise.all([
-        fetchField(review.user, 'name', 'Unknown user'),
-        fetchField(review.audiobook, 'name', 'Unknown audiobook'),
+        fetchFieldValue(review.user, 'name', 'Unknown user'),
+        fetchFieldValue(review.audiobook, 'name', 'Unknown audiobook'),
       ])
 
       return `${name} - book: ${audiobook} - score ${review.score}`
@@ -60,15 +43,14 @@ export default function User() {
   const positionLabel = useCallback(async (url) => {
     try {
       const response = await fetch(url)
-
       if (!response.ok) {
-        return (await response.text()) || 'Error loading position'
+        return await getServerError(response, 'Error loading position')
       }
 
       const position = await response.json()
       const [name, audiobook] = await Promise.all([
-        fetchField(position.user, 'name', 'Unknown user'),
-        fetchField(position.audiobook, 'name', 'Unknown audiobook'),
+        fetchFieldValue(position.user, 'name', 'Unknown user'),
+        fetchFieldValue(position.audiobook, 'name', 'Unknown audiobook'),
       ])
 
       return `${name} - book: ${audiobook} - position: ${position.position}`
@@ -77,35 +59,36 @@ export default function User() {
     }
   }, [])
 
-  useEffect(() => {
-    fetch(apiUrl)
-      .then((response) => {
-        if (!response.ok) {
-          setError(response.status)
-          return response.text().then((text) => {
-            setMessage(text)
-            return null
-          })
-        }
+  const loadUser = useCallback(async () => {
+    setErrCode(null)
+    setErrMsg('')
 
-        return response.json()
-      })
-      .then((result) => {
-        if (result) {
-          setData(result)
-        }
-      })
-      .catch(() => {
-        setError('fetch failed')
-        setMessage('fetch failed')
-      })
+    try {
+      const response = await fetch(apiUrl)
+      if (!response.ok) {
+        setErrCode(response.status)
+        setErrMsg(await getServerError(response, 'Error loading user'))
+        return
+      }
+
+      setEtag(response.headers.get('etag') || '')
+      const json = await response.json()
+      setUser(json)
+    } catch {
+      setErrCode('fetch failed')
+      setErrMsg('Error loading user, please retry.')
+    }
   }, [apiUrl])
 
-  if (error) {
-    return <Error errorCode={error} message={message} />
+  useEffect(() => {
+    loadUser()
+  }, [loadUser])
+
+  if (errCode) {
+    return <Error errorCode={errCode} message={errMsg} />
   }
 
-  if (!data) {
+  if (!user) {
     return (
       <div className="loading-container">
         <div className="spinner"></div>
@@ -122,16 +105,31 @@ export default function User() {
         </a>
       </nav>
 
-      <section className="object-header">
+      <section className="item-head">
         <p className="eyebrow">User Detail</p>
-        <h1>{data.name}</h1>
-        <p className="object-subtitle">{data.email}</p>
-        <button>
-          Update user
-        </button>
-        <button>
-          Delete user
-        </button>
+        <h1>{user.name}</h1>
+        <p className="subtitle">{user.email}</p>
+        <div className="actions">
+          <Update
+            onClick={() => setPopUp('update')}
+            active={popUp === 'update'}
+            etag={etag}
+            modelApi={modelApiUrl}
+            itemApi={apiUrl}
+            name="user"
+            arrays={[]}
+            onDone={loadUser}
+          />
+          <Delete
+            onClick={() => setPopUp('delete')}
+            active={popUp === 'delete'}
+            etag={etag}
+            itemApi={apiUrl}
+            goTo="/users"
+            name="user"
+            onDone={loadUser}
+          />
+        </div>
       </section>
 
       <div className="model-view-switch" aria-label="User sections">
@@ -151,9 +149,44 @@ export default function User() {
         </button>
       </div>
 
+      {popUp && (
+        <div className="popup-backdrop" role="dialog" aria-modal="true" onClick={() => setPopUp('')}>
+          <div className="popup-card" onClick={(event) => event.stopPropagation()}>
+            <button
+              type="button"
+              className="popup-close"
+              onClick={() => setPopUp('')}
+              aria-label="Close popup"
+            >
+              x
+            </button>
+            {popUp === 'update' ? (
+              <Update
+                type="content"
+                etag={etag}
+                modelApi={modelApiUrl}
+                itemApi={apiUrl}
+                name="user"
+                arrays={[]}
+                onDone={loadUser}
+              />
+            ) : (
+              <Delete
+                type="content"
+                etag={etag}
+                itemApi={apiUrl}
+                goTo="/users"
+                name="user"
+                onDone={loadUser}
+              />
+            )}
+          </div>
+        </div>
+      )}
+
       {tab === 'reviews' ? (
         <ModelList
-          items={data.reviews}
+          items={user.reviews}
           routePart="reviews"
           emptyText="No reviews found."
           loadingText="Loading review..."
@@ -163,7 +196,7 @@ export default function User() {
         />
       ) : (
         <ModelList
-          items={data.positions}
+          items={user.positions}
           routePart="positions"
           emptyText="No positions found."
           loadingText="Loading position..."
@@ -175,3 +208,4 @@ export default function User() {
     </div>
   )
 }
+

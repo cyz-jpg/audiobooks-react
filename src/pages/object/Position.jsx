@@ -1,16 +1,10 @@
 import { useParams } from 'react-router-dom'
 import Error from '../Error'
+import { decodeEncodedUrl } from '../../utils/utils.jsx'
 
-export default function Position() {
+export default function Position({ modelApiUrl }) {
   const { encodedUrl } = useParams()
-
-  let apiUrl = null
-
-  try {
-    apiUrl = decodeURIComponent(encodedUrl)
-  } catch {
-    apiUrl = null
-  }
+  const apiUrl = decodeEncodedUrl(encodedUrl)
 
   if (!apiUrl) {
     return <Error errorCode={400} />
