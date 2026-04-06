@@ -2,7 +2,7 @@ import { useParams } from 'react-router-dom'
 import Error from '../Error'
 import { decodeEncodedUrl } from '../../utils/utils.jsx'
 
-export default function Review({ modelApiUrl }) {
+export default function Review() {
   const { encodedUrl } = useParams()
   const apiUrl = decodeEncodedUrl(encodedUrl)
 

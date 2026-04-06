@@ -17,10 +17,6 @@ export default function Audiobook({ modelApiUrl }) {
 
   const apiUrl = decodeEncodedUrl(encodedUrl)
 
-  if (!apiUrl) {
-    return <Error errorCode={400} />
-  }
-
   const reviewLabel = useCallback(async (url) => {
     try {
       const response = await fetch(url)
@@ -73,8 +69,13 @@ export default function Audiobook({ modelApiUrl }) {
   }, [apiUrl])
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     loadAudiobook()
   }, [loadAudiobook])
+
+  if (!apiUrl) {
+    return <Error errorCode={400} />
+  }
 
   if (errCode) {
     return <Error errorCode={errCode} message={errMsg} />

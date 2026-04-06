@@ -26,8 +26,6 @@ export default function UpdateForm({
       return undefined
     }
 
-    setErr('')
-
     fetch(modelApi)
       .then(async (response) => {
         if (!response.ok) {

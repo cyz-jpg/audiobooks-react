@@ -17,10 +17,6 @@ export default function User({ modelApiUrl }) {
 
   const apiUrl = decodeEncodedUrl(encodedUrl)
 
-  if (!apiUrl) {
-    return <Error errorCode={400} />
-  }
-
   const reviewLabel = useCallback(async (url) => {
     try {
       const response = await fetch(url)
@@ -81,8 +77,13 @@ export default function User({ modelApiUrl }) {
   }, [apiUrl])
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     loadUser()
   }, [loadUser])
+
+  if (!apiUrl) {
+    return <Error errorCode={400} />
+  }
 
   if (errCode) {
     return <Error errorCode={errCode} message={errMsg} />

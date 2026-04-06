@@ -29,13 +29,10 @@ export default function ModelList({
   const totalPages = Math.max(1, Math.ceil(items.length / PAGE_SIZE))
 
   const visible = useMemo(() => {
-    const startIndex = (page - 1) * PAGE_SIZE
+    const effectivePage = Math.min(page, totalPages)
+    const startIndex = (effectivePage - 1) * PAGE_SIZE
     return items.slice(startIndex, startIndex + PAGE_SIZE)
-  }, [items, page])
-
-  useEffect(() => {
-    setPage((currentPage) => Math.min(currentPage, totalPages))
-  }, [totalPages])
+  }, [items, page, totalPages])
 
   useEffect(() => {
     let isCancelled = false
@@ -80,6 +77,7 @@ export default function ModelList({
     return () => {
       isCancelled = true
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [errorText, fallbackText, field, resolveText, visible])
 
   const goToPreviousPage = () => {

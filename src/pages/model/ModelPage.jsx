@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom'
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import Error from '../Error'
 import ModelForm from '../../components/ModelForm.jsx'
 import ModelList from '../../components/ModelList.jsx'
@@ -26,7 +26,7 @@ export default function ModelPage({
   const [mediaType, setMediaType] = useState('application/json')
   const [tab, setTab] = useState('new-item')
 
-  const load = async () => {
+  const load = useCallback(async () => {
     setError(null)
     setMessage('')
 
@@ -53,11 +53,12 @@ export default function ModelPage({
       setError('fetch failed')
       setMessage(`Error loading ${itemName}, please retry.`)
     }
-  }
+  }, [apiUrl, itemName])
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     load()
-  }, [apiUrl])
+  }, [load])
 
   if (error) {
     return <Error errorCode={error} message={message} />

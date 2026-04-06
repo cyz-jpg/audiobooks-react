@@ -16,10 +16,6 @@ export default function Genre({ modelApiUrl }) {
 
   const apiUrl = decodeEncodedUrl(encodedUrl)
 
-  if (!apiUrl) {
-    return <Error errorCode={400} />
-  }
-
   const audiobookText = useCallback(async (url) => {
     try {
       const response = await fetch(url)
@@ -62,8 +58,13 @@ export default function Genre({ modelApiUrl }) {
   }, [apiUrl])
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     loadGenre()
   }, [loadGenre])
+
+  if (!apiUrl) {
+    return <Error errorCode={400} />
+  }
 
   if (errCode) {
     return <Error errorCode={errCode} message={errMsg} />

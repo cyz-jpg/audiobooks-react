@@ -1,9 +1,7 @@
 import { Link } from 'react-router-dom'
 import '../css/Home.css'
 
-export default function Home({ apiRes }) {
-  const data = apiRes
-
+export default function Home() {
   return (
     <div>
       <h1>Beschikbare collecties</h1>
