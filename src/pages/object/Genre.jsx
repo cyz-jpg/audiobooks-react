@@ -1,20 +1,33 @@
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import ModelList from '../../components/ModelList.jsx'
 import Update from '../../components/Update.jsx'
 import Delete from '../../components/Delete.jsx'
 import Error from '../Error'
-import { decodeEncodedUrl, fetchFieldValue, getServerError } from '../../utils/utils.jsx'
+import {
+  decodeEncodedUrl,
+  fetchFieldValue,
+  getServerError,
+} from '../../utils/utils.jsx'
+import useDetail from '../../hooks/useDetail.jsx'
 
 export default function Genre({ modelApiUrl }) {
   const { encodedUrl } = useParams()
-  const [genre, setGenre] = useState(null)
-  const [errCode, setErrCode] = useState(null)
-  const [errMsg, setErrMsg] = useState('')
-  const [popUp, setPopUp] = useState('')
-  const [etag, setEtag] = useState('')
-
   const apiUrl = decodeEncodedUrl(encodedUrl)
+
+  const {
+    data: genre,
+    setData: setGenre,
+    error,
+    setError,
+    message,
+    setMessage,
+    popup,
+    setPopup,
+    etag,
+    setEtag,
+    closePopupIfBackdrop,
+  } = useDetail()
 
   const audiobookText = useCallback(async (url) => {
     try {
@@ -26,8 +39,11 @@ export default function Genre({ modelApiUrl }) {
       const book = await response.json()
       const authors = Array.isArray(book.authors) ? book.authors.join(', ') : ''
       const bookGenres = Array.isArray(book.genres) ? book.genres : []
+
       const genreNames = await Promise.all(
-        bookGenres.map((genreUrl) => fetchFieldValue(genreUrl, 'name', 'Unknown genre')),
+        bookGenres.map((genreUrl) =>
+          fetchFieldValue(genreUrl, 'name', 'Unknown genre')
+        ),
       )
 
       return `${book.name} - authors: ${authors} - genres: ${genreNames.join(', ')}`
@@ -37,14 +53,15 @@ export default function Genre({ modelApiUrl }) {
   }, [])
 
   const loadGenre = useCallback(async () => {
-    setErrCode(null)
-    setErrMsg('')
+    setError('')
+    setMessage('')
 
     try {
       const response = await fetch(apiUrl)
+
       if (!response.ok) {
-        setErrCode(response.status)
-        setErrMsg(await getServerError(response, 'Error loading genre'))
+        setError(response.status)
+        setMessage(await getServerError(response, 'Error loading genre'))
         return
       }
 
@@ -52,13 +69,12 @@ export default function Genre({ modelApiUrl }) {
       const json = await response.json()
       setGenre(json)
     } catch {
-      setErrCode('fetch failed')
-      setErrMsg('Error loading genre, please retry.')
+      setError('fetch failed')
+      setMessage('Error loading genre, please retry.')
     }
-  }, [apiUrl])
+  }, [apiUrl, setGenre, setError, setMessage, setEtag])
 
   useEffect(() => {
-    // eslint-disable-next-line react-hooks/set-state-in-effect
     loadGenre()
   }, [loadGenre])
 
@@ -66,8 +82,8 @@ export default function Genre({ modelApiUrl }) {
     return <Error errorCode={400} />
   }
 
-  if (errCode) {
-    return <Error errorCode={errCode} message={errMsg} />
+  if (error) {
+    return <Error errorCode={error} message={message} />
   }
 
   if (!genre) {
@@ -91,10 +107,11 @@ export default function Genre({ modelApiUrl }) {
         <p className="eyebrow">Genre Detail</p>
         <h1>{genre.name}</h1>
         <p className="subtitle">{genre.description}</p>
+
         <div className="actions">
           <Update
-            onClick={() => setPopUp('update')}
-            active={popUp === 'update'}
+            onClick={() => setPopup('update')}
+            active={popup === 'update'}
             etag={etag}
             modelApi={modelApiUrl}
             itemApi={apiUrl}
@@ -103,8 +120,8 @@ export default function Genre({ modelApiUrl }) {
             onDone={loadGenre}
           />
           <Delete
-            onClick={() => setPopUp('delete')}
-            active={popUp === 'delete'}
+            onClick={() => setPopup('delete')}
+            active={popup === 'delete'}
             etag={etag}
             itemApi={apiUrl}
             goTo="/genres"
@@ -114,18 +131,24 @@ export default function Genre({ modelApiUrl }) {
         </div>
       </section>
 
-      {popUp && (
-        <div className="popup-backdrop" role="dialog" aria-modal="true" onClick={() => setPopUp('')}>
-          <div className="popup-card" onClick={(event) => event.stopPropagation()}>
+      {popup && (
+        <div
+          className="popup-backdrop"
+          role="dialog"
+          aria-modal="true"
+          onClick={closePopupIfBackdrop}
+        >
+          <div className="popup-card">
             <button
               type="button"
               className="popup-close"
-              onClick={() => setPopUp('')}
+              onClick={() => setPopup('')}
               aria-label="Close popup"
             >
               x
             </button>
-            {popUp === 'update' ? (
+
+            {popup === 'update' ? (
               <Update
                 type="content"
                 etag={etag}

@@ -4,18 +4,32 @@ import ModelList from '../../components/ModelList.jsx'
 import Update from '../../components/Update.jsx'
 import Delete from '../../components/Delete.jsx'
 import Error from '../Error'
-import { decodeEncodedUrl, fetchFieldValue, getServerError } from '../../utils/utils.jsx'
+import {
+  decodeEncodedUrl,
+  fetchFieldValue,
+  getServerError,
+} from '../../utils/utils.jsx'
+import useDetail from '../../hooks/useDetail.jsx'
 
 export default function Audiobook({ modelApiUrl }) {
   const { encodedUrl } = useParams()
-  const [book, setBook] = useState(null)
-  const [errCode, setErrCode] = useState(null)
-  const [errMsg, setErrMsg] = useState('')
-  const [tab, setTab] = useState('reviews')
-  const [popUp, setPopUp] = useState('')
-  const [etag, setEtag] = useState('')
-
   const apiUrl = decodeEncodedUrl(encodedUrl)
+
+  const {
+    data: book,
+    setData: setBook,
+    error,
+    setError,
+    message,
+    setMessage,
+    popup,
+    setPopup,
+    etag,
+    setEtag,
+    closePopupIfBackdrop,
+  } = useDetail()
+
+  const [tab, setTab] = useState('reviews')
 
   const reviewLabel = useCallback(async (url) => {
     try {
@@ -48,14 +62,15 @@ export default function Audiobook({ modelApiUrl }) {
   }, [])
 
   const loadAudiobook = useCallback(async () => {
-    setErrCode(null)
-    setErrMsg('')
+    setError('')
+    setMessage('')
 
     try {
       const response = await fetch(apiUrl)
+
       if (!response.ok) {
-        setErrCode(response.status)
-        setErrMsg(await getServerError(response, 'Error loading audiobook'))
+        setError(response.status)
+        setMessage(await getServerError(response, 'Error loading audiobook'))
         return
       }
 
@@ -63,13 +78,12 @@ export default function Audiobook({ modelApiUrl }) {
       const json = await response.json()
       setBook(json)
     } catch {
-      setErrCode('fetch failed')
-      setErrMsg('Error loading audiobook, please retry.')
+      setError('fetch failed')
+      setMessage('Error loading audiobook, please retry.')
     }
-  }, [apiUrl])
+  }, [apiUrl, setBook, setError, setMessage, setEtag])
 
   useEffect(() => {
-    // eslint-disable-next-line react-hooks/set-state-in-effect
     loadAudiobook()
   }, [loadAudiobook])
 
@@ -77,8 +91,8 @@ export default function Audiobook({ modelApiUrl }) {
     return <Error errorCode={400} />
   }
 
-  if (errCode) {
-    return <Error errorCode={errCode} message={errMsg} />
+  if (error) {
+    return <Error errorCode={error} message={message} />
   }
 
   if (!book) {
@@ -119,8 +133,8 @@ export default function Audiobook({ modelApiUrl }) {
         )}
         <div className="actions">
           <Update
-            onClick={() => setPopUp('update')}
-            active={popUp === 'update'}
+            onClick={() => setPopup('update')}
+            active={popup === 'update'}
             etag={etag}
             modelApi={modelApiUrl}
             itemApi={apiUrl}
@@ -129,8 +143,8 @@ export default function Audiobook({ modelApiUrl }) {
             onDone={loadAudiobook}
           />
           <Delete
-            onClick={() => setPopUp('delete')}
-            active={popUp === 'delete'}
+            onClick={() => setPopup('delete')}
+            active={popup === 'delete'}
             etag={etag}
             itemApi={apiUrl}
             goTo="/audiobooks"
@@ -143,14 +157,17 @@ export default function Audiobook({ modelApiUrl }) {
       <div className="model-view-switch" aria-label="Audiobook sections">
         <button
           type="button"
-          className={tab === 'reviews' ? 'model-view-switch-button is-active' : 'model-view-switch-button'}
+          className={tab === 'reviews'
+            ? 'model-view-switch-button is-active'
+            : 'model-view-switch-button'}
           onClick={() => setTab('reviews')}
         >
           Reviews
         </button>
         <button
           type="button"
-          className={tab === 'positions' ? 'model-view-switch-button is-active' : 'model-view-switch-button'}
+          className={tab === 'positions' ? 'model-view-switch-button is-active'
+            : 'model-view-switch-button'}
           onClick={() => setTab('positions')}
         >
           Positions
@@ -158,8 +175,13 @@ export default function Audiobook({ modelApiUrl }) {
       </div>
 
       {popUp && (
-        <div className="popup-backdrop" role="dialog" aria-modal="true" onClick={() => setPopUp('')}>
-          <div className="popup-card" onClick={(event) => event.stopPropagation()}>
+        <div
+          className="popup-backdrop"
+          role="dialog"
+          aria-modal="true"
+          onClick={closePopupIfBackdrop}
+        >
+          <div className="popup-card">
             <button
               type="button"
               className="popup-close"

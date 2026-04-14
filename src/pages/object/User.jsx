@@ -4,18 +4,32 @@ import ModelList from '../../components/ModelList.jsx'
 import Update from '../../components/Update.jsx'
 import Delete from '../../components/Delete.jsx'
 import Error from '../Error'
-import { decodeEncodedUrl, fetchFieldValue, getServerError } from '../../utils/utils.jsx'
+import {
+  decodeEncodedUrl,
+  fetchFieldValue,
+  getServerError,
+} from '../../utils/utils.jsx'
+import useDetail from '../../hooks/useDetail.jsx'
 
 export default function User({ modelApiUrl }) {
   const { encodedUrl } = useParams()
-  const [user, setUser] = useState(null)
-  const [errCode, setErrCode] = useState(null)
-  const [errMsg, setErrMsg] = useState('')
-  const [tab, setTab] = useState('reviews')
-  const [popUp, setPopUp] = useState('')
-  const [etag, setEtag] = useState('')
-
   const apiUrl = decodeEncodedUrl(encodedUrl)
+
+  const {
+    data: user,
+    setData: setUser,
+    error,
+    setError,
+    message,
+    setMessage,
+    popup,
+    setPopup,
+    etag,
+    setEtag,
+    closePopupIfBackdrop,
+  } = useDetail()
+
+  const [tab, setTab] = useState('reviews')
 
   const reviewLabel = useCallback(async (url) => {
     try {
@@ -56,14 +70,15 @@ export default function User({ modelApiUrl }) {
   }, [])
 
   const loadUser = useCallback(async () => {
-    setErrCode(null)
-    setErrMsg('')
+    setError('')
+    setMessage('')
 
     try {
       const response = await fetch(apiUrl)
+
       if (!response.ok) {
-        setErrCode(response.status)
-        setErrMsg(await getServerError(response, 'Error loading user'))
+        setError(response.status)
+        setMessage(await getServerError(response, 'Error loading user'))
         return
       }
 
@@ -71,13 +86,12 @@ export default function User({ modelApiUrl }) {
       const json = await response.json()
       setUser(json)
     } catch {
-      setErrCode('fetch failed')
-      setErrMsg('Error loading user, please retry.')
+      setError('fetch failed')
+      setMessage('Error loading user, please retry.')
     }
-  }, [apiUrl])
+  }, [apiUrl, setUser, setError, setMessage, setEtag])
 
   useEffect(() => {
-    // eslint-disable-next-line react-hooks/set-state-in-effect
     loadUser()
   }, [loadUser])
 
@@ -85,8 +99,8 @@ export default function User({ modelApiUrl }) {
     return <Error errorCode={400} />
   }
 
-  if (errCode) {
-    return <Error errorCode={errCode} message={errMsg} />
+  if (error) {
+    return <Error errorCode={error} message={message} />
   }
 
   if (!user) {
@@ -110,10 +124,11 @@ export default function User({ modelApiUrl }) {
         <p className="eyebrow">User Detail</p>
         <h1>{user.name}</h1>
         <p className="subtitle">{user.email}</p>
+
         <div className="actions">
           <Update
-            onClick={() => setPopUp('update')}
-            active={popUp === 'update'}
+            onClick={() => setPopup('update')}
+            active={popup === 'update'}
             etag={etag}
             modelApi={modelApiUrl}
             itemApi={apiUrl}
@@ -122,8 +137,8 @@ export default function User({ modelApiUrl }) {
             onDone={loadUser}
           />
           <Delete
-            onClick={() => setPopUp('delete')}
-            active={popUp === 'delete'}
+            onClick={() => setPopup('delete')}
+            active={popup === 'delete'}
             etag={etag}
             itemApi={apiUrl}
             goTo="/users"
@@ -136,32 +151,46 @@ export default function User({ modelApiUrl }) {
       <div className="model-view-switch" aria-label="User sections">
         <button
           type="button"
-          className={tab === 'reviews' ? 'model-view-switch-button is-active' : 'model-view-switch-button'}
+          className={
+            tab === 'reviews'
+              ? 'model-view-switch-button is-active'
+              : 'model-view-switch-button'
+          }
           onClick={() => setTab('reviews')}
         >
           Reviews
         </button>
         <button
           type="button"
-          className={tab === 'positions' ? 'model-view-switch-button is-active' : 'model-view-switch-button'}
+          className={
+            tab === 'positions'
+              ? 'model-view-switch-button is-active'
+              : 'model-view-switch-button'
+          }
           onClick={() => setTab('positions')}
         >
           Positions
         </button>
       </div>
 
-      {popUp && (
-        <div className="popup-backdrop" role="dialog" aria-modal="true" onClick={() => setPopUp('')}>
-          <div className="popup-card" onClick={(event) => event.stopPropagation()}>
+      {popup && (
+        <div
+          className="popup-backdrop"
+          role="dialog"
+          aria-modal="true"
+          onClick={closePopupIfBackdrop}
+        >
+          <div className="popup-card">
             <button
               type="button"
               className="popup-close"
-              onClick={() => setPopUp('')}
+              onClick={() => setPopup('')}
               aria-label="Close popup"
             >
               x
             </button>
-            {popUp === 'update' ? (
+
+            {popup === 'update' ? (
               <Update
                 type="content"
                 etag={etag}
@@ -209,4 +238,3 @@ export default function User({ modelApiUrl }) {
     </div>
   )
 }
-
