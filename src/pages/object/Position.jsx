@@ -35,9 +35,6 @@ export default function Position({ modelApiUrl }) {
   const [audiobookLink, setAudiobookLink] = useState('')
 
   const loadPosition = useCallback(async () => {
-    setError('')
-    setMessage('')
-
     try {
       const response = await fetch(apiUrl)
 
@@ -47,6 +44,8 @@ export default function Position({ modelApiUrl }) {
         return
       }
 
+      setError('')
+      setMessage('')
       const json = await response.json()
       setData(json)
       setEtag(response.headers.get('etag') || '')
@@ -71,7 +70,13 @@ export default function Position({ modelApiUrl }) {
   }, [apiUrl, setData, setError, setMessage, setEtag])
 
   useEffect(() => {
-    loadPosition()
+    const timer = setTimeout(() => {
+      void loadPosition()
+    }, 0)
+
+    return () => {
+      clearTimeout(timer)
+    }
   }, [loadPosition])
 
   const formattedPosition = () => {

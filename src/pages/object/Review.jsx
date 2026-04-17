@@ -35,9 +35,6 @@ export default function Review({ modelApiUrl }) {
   const [audiobookLink, setAudiobookLink] = useState('')
 
   const loadReview = useCallback(async () => {
-    setError('')
-    setMessage('')
-
     try {
       const response = await fetch(apiUrl)
 
@@ -47,6 +44,8 @@ export default function Review({ modelApiUrl }) {
         return
       }
 
+      setError('')
+      setMessage('')
       const json = await response.json()
       setData(json)
       setEtag(response.headers.get('etag') || '')
@@ -71,7 +70,13 @@ export default function Review({ modelApiUrl }) {
   }, [apiUrl, setData, setError, setMessage, setEtag])
 
   useEffect(() => {
-    loadReview()
+    const timer = setTimeout(() => {
+      void loadReview()
+    }, 0)
+
+    return () => {
+      clearTimeout(timer)
+    }
   }, [loadReview])
 
   if (!apiUrl) {

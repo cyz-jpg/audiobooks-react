@@ -174,7 +174,7 @@ export default function Audiobook({ modelApiUrl }) {
         </button>
       </div>
 
-      {popUp && (
+      {popup && (
         <div
           className="popup-backdrop"
           role="dialog"
@@ -185,12 +185,12 @@ export default function Audiobook({ modelApiUrl }) {
             <button
               type="button"
               className="popup-close"
-              onClick={() => setPopUp('')}
+              onClick={() => setPopup('')}
               aria-label="Close popup"
             >
               x
             </button>
-            {popUp === 'update' ? (
+            {popup === 'update' ? (
               <Update
                 type="content"
                 etag={etag}
